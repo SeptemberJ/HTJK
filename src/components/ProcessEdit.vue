@@ -5,12 +5,17 @@
       :visible.sync="dialogProcessVisible"
       width="650px">
       <section>
-        <p class="TextAlignL MarginB_10"><b>已上传的文件：</b></p>
+        <p v-if="processName != '放号'" class="TextAlignL MarginB_10"><b>已上传的文件：</b></p>
+        <p v-if="processName != '放号' && fileList.length == 0" class="TextAlignL PaddingL_28">无相关文件</p>
         <div v-if="fileList.length > 0">
-          <p class="TextAlignL MarginB_10" style="padding-left: 15px;" v-for="(file, idx) in fileList" :key="idx">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></p>
+          <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList" :key="idx">
+            {{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a>
+            <span v-if="processName == '隐蔽验收' ||  processName == '安装调试'" style="float:right;width: 50px;text-align:right;">{{file.fpercent}}</span>
+            <span style="float:right;">{{file.fileDate}}</span>
+          </p>
         </div>
-        <div v-if="ifShowUpload && processStatus != 2">
-          <p class="TextAlignL MarginT_20"><b>上传新文件：</b></p>
+        <div v-if="processName != '放号' && processStatus != 2">
+          <p class="TextAlignL MarginT_20"><b>上传新文件：{{formFile.fileName}}</b></p>
           <el-form :model="formFile" :rules="rulesFile" ref="formFile" label-width="100px" label-position="left">
             <el-form-item label="文件" prop="fileName" class="TextAlignL">
               <el-upload
@@ -20,6 +25,7 @@
                 :action="uploadAdr"
                 accept=".pdf,.doc,.PDF"
                 :limit="1"
+                :on-change="changeFile"
                 :before-upload="beforeUpload"
                 :on-remove="removeFile"
                 :on-success="handleUploadSuccess"
@@ -28,12 +34,17 @@
                 <div slot="tip" class="el-upload__tip" style="display: inline-block;padding-left: 10px;margin-top: 0;">（ 文件格式需为doc/pdf ）</div>
               </el-upload>
             </el-form-item>
+            <el-form-item v-if="processName == '隐蔽验收' || processName == '安装调试'" label="完成比列" prop="percent" class="TextAlignL">
+              <el-input v-model="formFile.percent" style="width: 200px;">
+                <el-button slot="append">%</el-button>
+              </el-input>
+            </el-form-item>
           </el-form>
         </div>
       </section>
-      <span v-if="processStatus != 2" slot="footer" class="dialog-footer TextAlignC" style="width: 100%;display: inline-block;">
-        <el-button type="primary" @click="finish">确认完成</el-button>
-        <el-button type="primary" @click="uploadFile">提 交</el-button>
+      <span slot="footer" class="dialog-footer TextAlignC" style="width: 100%;display: inline-block;">
+        <el-button type="danger" @click="finish" :disabled="processStatus == 2">确认完成</el-button>
+        <el-button type="primary" v-if="processStatus != 2 && processName != '放号'" @click="uploadFile('formFile')">提 交</el-button>
       </span>
     </el-dialog>
   </div>
@@ -50,11 +61,15 @@ export default {
       dialogProcessVisible: true,
       fileUrl: '',
       formFile: {
-        fileName: ''
+        fileName: '',
+        percent: ''
       },
       rulesFile: {
         fileName: [
           { required: true, message: '请选择需要上传的文件!', trigger: 'change' }
+        ],
+        percent: [
+          { required: true, message: '请输入完成比例!', trigger: 'change' }
         ]
       },
       fileList: [],
@@ -87,10 +102,23 @@ export default {
     removeFile (file, fileList) {
       this.formFile.fileName = ''
     },
-    uploadFile () {
-      this.$refs.upload.submit()
+    changeFile (file) {
+      this.formFile.fileName = file.name
+    },
+    uploadFile (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$refs.upload.submit()
+        } else {
+          this.$message({
+            message: '请将信息补充完整！',
+            type: 'warning'
+          })
+        }
+      })
     },
     submit (filename) {
+      let Percent = (this.processName === '隐蔽验收' || this.processName === '安装调试') ? this.formFile.percent : 0
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
@@ -98,6 +126,7 @@ export default {
       tmpData += '<FContractNo>' + this.contractNo + '</FContractNo>'
       tmpData += '<FType>' + this.processName + '</FType>'
       tmpData += '<FPath>' + filename + '</FPath>'
+      tmpData += '<FPercent>' + Percent + '</FPercent>'
       tmpData += '</PIC_UPLoad>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -134,7 +163,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>select fcontractno 合同号,ftype 阶段,'http://plant.fs-elliott.cn:8082/zetian_file/'+fcontractno+'/'+fpath 文件路径 from Z_FILE where fcontractno='" + this.contractNo + "' and ftype='" + this.processName + "'</FSQL>"
+      tmpData += "<FSQL>select fcontractno 合同号,ftype 阶段,'http://plant.fs-elliott.cn:8082/zetian_file/'+fcontractno+'/'+fpath 文件路径,convert(varchar(50),fdate,23)fdate,isnull(fper,0)fper from Z_FILE where fcontractno='" + this.contractNo + "' and ftype='" + this.processName + "'</FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -149,6 +178,8 @@ export default {
         let HtmlStr = $(Result).html()
         let Info = (JSON.parse(HtmlStr))
         this.fileList = Info.map(item => {
+          item.fileDate = item.fdate ? item.fdate : ''
+          item.fpercent = item.fper + '%'
           item.fileUrl = item['文件路径']
           let startiIdx = item['文件路径'].indexOf(this.contractNo) + this.contractNo.length + 1
           item.fileName = item['文件路径'].slice(startiIdx)

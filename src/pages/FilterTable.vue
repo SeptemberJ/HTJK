@@ -1,7 +1,7 @@
 <template>
   <div class="FilterTable">
     <el-row>
-      <el-col :span="10" class="FilterBlock">
+      <el-col :span="11" id="FilterBlock" class="FilterBlock">
         <section>
           <el-row>
             <el-form ref="formFilter" :model="formFilter" label-width="70px" label-position="left" size="mini">
@@ -165,7 +165,8 @@
                     <section>
                       <p style="text-align: left;padding-top: 5px;">模糊查询</p>
                       <div class="vagueSearchBlock">
-                        <el-input class="MarginT_10" v-model="formFilter.vagueSearch" placeholder="" size="mini"></el-input>
+                        <!-- @change="mohuSearch" @keyup.enter.native='enterEvent' -->
+                        <el-input class="MarginT_10" @blur="mohuSearch" @keyup.enter.native='enterEvent'  v-model="formFilter.vagueSearch" clearable size="mini"></el-input>
                         <P style='font-size: 12px;margin-top: 5px;padding: 0 5px;'>可以中间夹带*来查询，*代表任意字符</P>
                       </div>
                     </section>
@@ -176,10 +177,11 @@
           </el-row>
         </section>
       </el-col>
-      <el-col :span="14" class="ResultBlock BgGray">
+      <el-col :span="13" id="ResultBlock" class="ResultBlock BgGray">
         <el-table id="resultTable"
           v-loading="loading"
           :data="resultData"
+          :height="tableHieght"
           border
           @row-dblclick="goDetail"
           style="width: 100%">
@@ -190,19 +192,19 @@
           </el-table-column>
           <el-table-column
             fixed
-            prop="contractNo"
+            prop="合同号"
             label="合同号"
             show-overflow-tooltip
             width="180">
           </el-table-column>
           <el-table-column
             fixed
-            prop="projectName"
+            prop="项目名称"
             label="项目名称"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="projectCode"
+            prop="项目编号"
             label="项目编号"
             show-overflow-tooltip>
           </el-table-column>
@@ -309,7 +311,8 @@ export default {
   name: 'FilterTable',
   data () {
     return {
-      loading: true,
+      loading: false,
+      tableHieght: 0,
       formFilter: {
         signDepartment: -1,
         contractPrice: -1,
@@ -400,20 +403,29 @@ export default {
       sortList: ['按签约价', '按结算价', '按毛利率', '按总进度', '按出货率', '按收款率', '按商务人', '按项目经理']
     }
   },
+  created () {
+    setTimeout(() => {
+      let height = document.documentElement.clientHeight
+      document.getElementById('FilterBlock').style.height = height + 'px'
+      this.tableHieght = height
+    }, 0)
+    this.getList()
+    // if (this.resultDataOrigin.length > 0) {
+    //   this.getList()
+    // }
+  },
   computed: {
     ...mapState({
+      resultDataOrigin: state => state.resultDataOrigin
     })
-  },
-  created () {
-    this.getList()
   },
   methods: {
     ...mapActions([
-      'updateContractNo'
+      'updateContractNo',
+      'updateResultData'
     ]),
     goDetail (row) {
-      this.updateContractNo(row.contractNo)
-      // this.updateContractNo('110079')
+      this.updateContractNo(row['合同号'])
       this.$router.push({name: 'InfoDynamicTable'})
     },
     getList () {
@@ -434,21 +446,53 @@ export default {
         // 提取数据
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
-        let Info = (JSON.parse(HtmlStr))
-        Info.map((item, idx) => {
-          let obj = {
-            contractNo: item['合同号'],
-            projectName: item['项目名称'],
-            projectCode: item['项目编号']
-          }
-          this.resultData.push(obj)
-          if (idx + 1 === Info.length) {
-            this.loading = false
-          }
-        })
+        // let Info = JSON.parse(HtmlStr)
+        // Info.map((item, idx) => {
+        //   let obj = {
+        //     contractNo: item['合同号'],
+        //     projectName: item['项目名称'],
+        //     projectCode: item['项目编号']
+        //   }
+        //   this.resultData.push(obj)
+        //   if (idx + 1 === Info.length) {
+        //     this.loading = false
+        //   }
+        // })
+        this.updateResultData(JSON.parse(HtmlStr))
+        // this.resultData = JSON.parse(HtmlStr)
+        // this.loading = false
       }).catch((error) => {
         console.log(error)
       })
+    },
+    enterEvent () {
+      let keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode
+      if (keyCode === 13) {
+        this.mohuSearch()
+      }
+    },
+    // 模糊查询
+    mohuSearch () {
+      if (this.formFilter.vagueSearch) {
+        this.loading = true
+        let newResult = []
+        let keyArr = this.formFilter.vagueSearch.trim().split('*')
+        var regStr = ''
+        keyArr.map(function (item) {
+          regStr = regStr + '.*' + item
+          // regStr = regStr + '\\w*' + item
+        })
+        var reg = new RegExp(regStr)
+        this.resultDataOrigin.map((item, idx) => {
+          if (reg.test(item['合同号'])) {
+            newResult.push(item)
+          }
+        })
+        this.resultData = newResult
+        this.loading = false
+      } else {
+        this.resultData = []
+      }
     }
   }
 }
@@ -456,7 +500,7 @@ export default {
 
 <style lang='less' scoped>
 .FilterTable{
-  padding: 5px;
+  padding: 0 5px;
   .FilterBlock{
     padding: 10px;
     border: 1px solid #7bbfea;

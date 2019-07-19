@@ -18,11 +18,18 @@ body{
 .MarginT_10 {
   margin-top: 10px;
 }
+.MarginB_10 {
+  margin-bottom: 10px;
+}
 .MarginT_20 {
   margin-top: 20px;
 }
-.MarginB_10 {
-  margin-bottom: 10px;
+.MarginB_20 {
+  margin-bottom: 20px;
+}
+
+.PaddingL_28{
+  padding-left: 28px;
 }
 
 .ColorWhite {

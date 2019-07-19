@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import InfoDynamicTable from '@/pages/InfoDynamicTable'
 import FilterTable from '@/pages/FilterTable'
+import Contract from '@/pages/Contract'
 // import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(VueRouter)
@@ -18,6 +19,12 @@ const router = new VueRouter({
       path: '/',
       name: 'FilterTable',
       component: FilterTable,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/Contract',
+      name: 'Contract',
+      component: Contract,
       meta: {requireAuth: false}
     }
   ]
