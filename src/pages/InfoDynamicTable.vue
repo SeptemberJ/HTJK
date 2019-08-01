@@ -29,20 +29,43 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
+              <el-form-item label="签约日期">
+                <el-input v-model="formBasic.qyrq" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col :span="8">
               <el-form-item label="是否先签约">
                 <el-input v-model="formBasic.isSigned" disabled></el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
           <el-row>
-            <el-col :span="6">
+            <el-col :span="6" class="TextAlignL">
               <el-form-item label="商务人员">
-                <el-input v-model="formBasic.swry"></el-input>
+                <el-input v-model="formBasic.swry" clearable style="width:70%;"></el-input>
+                <el-popover
+                  placement="right"
+                  width="100"
+                  trigger="click">
+                  <div>
+                    <p v-for="(people, idx) in swryHistory" :key="idx">{{people['商务人员']}}</p>
+                  </div>
+                  <el-button type="text" style="width:25%;display: inline-block;" slot="reference">历史记录</el-button>
+                </el-popover>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item label="签约日期">
-                <el-input v-model="formBasic.qyrq" disabled></el-input>
+            <el-col :span="6" class="TextAlignL">
+              <el-form-item label="项目经理">
+                <el-input v-model="formBasic.xmjl" clearable style="width:70%;"></el-input>
+                <el-popover
+                  placement="right"
+                  width="100"
+                  trigger="click">
+                  <div>
+                    <p v-for="(people, idx) in xmjlHistory" :key="idx">{{people['项目经理']}}</p>
+                  </div>
+                  <el-button type="text" style="width:25%;display: inline-block;" slot="reference">历史记录</el-button>
+                </el-popover>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -58,23 +81,35 @@
           </el-row>
           <el-row>
             <el-col :span="6">
-              <el-form-item label="项目经理">
-                <el-input v-model="formBasic.xmjl"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
               <el-form-item label="开工日期">
-                <el-input v-model="formBasic.kgrq"></el-input>
+                <el-date-picker
+                  v-model="formBasic.kgrq"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="选择日期">
+                </el-date-picker>
+                <!-- <el-input v-model="formBasic.kgrq"></el-input> -->
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="完工日期">
-                <el-input v-model="formBasic.wgrq"></el-input>
+                <el-date-picker
+                  v-model="formBasic.wgrq"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="选择日期">
+                </el-date-picker>
+                <!-- <el-input v-model="formBasic.wgrq"></el-input> -->
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="结算价">
                 <el-input v-model="formBasic.jsj" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="审计价">
+                <el-input v-model="formBasic.sjj" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -128,10 +163,24 @@
       <!-- 收款比例 -->
       <el-col :span="24">
         <div class="ModuleTit TextAlignL">收款比例</div>
-        <section v-if="receiptRateInfo.length > 0" class="TextAlignL MarginB_10" style="font-size: 14px;height: 150px;overflow-y: scroll;">
-          <div v-for="(item, idx) in receiptRateInfo" :key="idx" class="text item" style="padding: 5px 5px 5px 20px;">
-            <span>{{idx + 1}}. {{item.FName}}</span>
-            <span style="margin-left: 100px;">{{item.fpercent}}</span>
+        <section v-if="receiptRateInfo.length > 0" class="TextAlignL MarginB_10" style="font-size: 14px;height: 150px;overflow-y: scroll;padding:0 5px 5px 20px;">
+          <el-row style="margin-bottom: 10px; font-weight: bold;">
+            <el-col :span="4">项目</el-col>
+            <el-col :span="4">实际比例</el-col>
+            <el-col :span="4">应收金额</el-col>
+            <el-col :span="4">实际金额</el-col>
+            <el-col :span="4">未收金额</el-col>
+          </el-row>
+          <div v-for="(item, idx) in receiptRateInfo" :key="idx" class="text item MarginB_10">
+            <el-row>
+              <el-col :span="4">{{idx + 1}}. {{item.FName}}</el-col>
+              <el-col :span="4">{{item.fpercent}}</el-col>
+              <el-col :span="4">{{item.ys}}</el-col>
+              <el-col :span="4">{{item.sj}}</el-col>
+              <el-col :span="4">{{item.ws}}</el-col>
+            </el-row>
+            <!-- <span>{{idx + 1}}. {{item.FName}}</span>
+            <span style="margin-left: 100px;">{{item.fpercent}}</span> -->
           </div>
         </section>
         <!-- 无数据 -->
@@ -150,22 +199,24 @@
       </el-col> -->
     </el-row>
     <!-- 工程项目总进度 -->
-    <!-- 1代表可操作（黄色），0代表不可操作（灰色），2代表操作完成（绿色） -->
-    <el-col :span="24" class="TextAlignL"><span class="ModuleTit">工程项目总进度</span></el-col>
+    <!-- 1代表可操作（黄色），0代表不可操作（灰色），2代表操作完成（绿色），3代表警告(红色), 当前的流程蓝色 -->
+    <el-col :span="24" class="TextAlignL"><span class="ModuleTit">工程项目总进度{{curLuiCheng}}--{{curLuiChengIdx}}</span></el-col>
     <el-col :span="24" class="StepWrap TextAlignL" style="width: 100%;overflow-x: scroll;">
       <div :class="{SetpItem: true, 'NotAllowed': item.status == 0}" v-for="(item, idx) in steps" :key="idx" @click="changeStep(idx)">
-        <div :class="{'LineItem':true, 'bgYellow': item.status == 1, 'bgGrey': item.status == 0, 'bgGreen': item.status == 2}" v-show="idx > 0"></div>
+        <div :class="{'LineItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3}" v-show="idx > 0"></div>
         <div class="DotItemwrap">
-          <div :class="{'DotItem':true, 'bgYellow': item.status == 1, 'bgGrey': item.status == 0, 'bgGreen': item.status == 2}"></div>
+          <div class="TextItem">
+            <p>{{item.tit == '合同签订' || item.tit == '设备到现场' ? formBasic.swry : formBasic.xmjl}}</p>
+          </div>
+          <div :class="{'DotItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3}"></div>
           <div class="TextItem">
             <p>{{item.tit}}</p>
-            <p>{{item.date}}</p>
           </div>
         </div>
       </div>
     </el-col>
     <!-- ProcessEdit -->
-    <ProcessEdit v-if="ifEdit" :curTimeStamp="curTimeStamp" :processStatus="processStatus" :processName="processName" :contractNo="formBasic.contractNo" @refresh="getInfor" @toggleProcessDialog="toggleProcessDialog"/>
+    <ProcessEdit v-if="ifEdit" :curTimeStamp="curTimeStamp" :processStatus="processStatus" :processName="processName" :curEditIdx="curEditIdx" :curLuiChengIdx="curLuiChengIdx" :contractNo="formBasic.contractNo" @markRed="markRed" @refresh="getInfor" @toggleProcessDialog="toggleProcessDialog"/>
   </div>
 </template>
 
@@ -179,9 +230,13 @@ export default {
     return {
       ifEdit: false,
       processName: '',
-      curLuiCheng: '放号',
+      curLuiCheng: '',
+      curLuiChengIdx: '',
+      curEditIdx: '',
       processStatus: '',
       formBasic: {},
+      xmjlHistory: [],
+      swryHistory: [],
       receiptRateInfo: [],
       warnList: ['预收款未收齐'],
       steps: [],
@@ -199,7 +254,8 @@ export default {
   },
   created () {
     this.getInfor()
-    this.getReceiptRate()
+    this.getxmjl()
+    this.getSwry()
   },
   methods: {
     toggleProcessDialog (val) {
@@ -207,6 +263,51 @@ export default {
     },
     // 保存编辑信息
     save () {
+      let data = {
+        items: [
+          {
+            FContractNo: this.curContractNo,
+            f1: this.formBasic.swry,
+            f2: this.formBasic.xmjl,
+            fsdate: this.formBasic.kgrq ? this.formBasic.kgrq : '',
+            fedate: this.formBasic.wgrq ? this.formBasic.wgrq : ''
+          }
+        ]
+      }
+      var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
+      tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
+      tmpData += '<soap:Body> '
+      tmpData += '<Contractdetail xmlns="http://tempuri.org/">'
+      tmpData += '<FJSONMSG>' + JSON.stringify(data) + '</FJSONMSG>'
+      tmpData += '</Contractdetail>'
+      tmpData += '</soap:Body>'
+      tmpData += '</soap:Envelope>'
+      this.Http.post('Contractdetail', tmpData
+      ).then(res => {
+        let xml = res.data
+        let parser = new DOMParser()
+        let xmlDoc = parser.parseFromString(xml, 'text/xml')
+        // 提取数据
+        let Result = xmlDoc.getElementsByTagName('ContractdetailResponse')[0].getElementsByTagName('ContractdetailResult')[0]
+        let HtmlStr = $(Result).html()
+        let Info = (JSON.parse(HtmlStr))[0]
+        if (Info.code === '1') {
+          this.$message({
+            message: '保存成功!',
+            type: 'success'
+          })
+          this.getInfor()
+          this.getxmjl()
+          this.getSwry()
+        } else {
+          this.$message({
+            message: '保存失败!',
+            type: 'error'
+          })
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
     },
     changeStep (idx) {
       this.processStatus = this.steps[idx].status
@@ -219,21 +320,27 @@ export default {
             type: 'warning'
           })
           break
-        case 2:
-          this.toggleProcessDialog(true)
-          break
+        // case 2:
+        //   this.toggleProcessDialog(true)
+        //   break
         default:
-          if (this.curLuiCheng !== this.steps[idx].tit) {
-            this.$message({
-              message: '请按照流程先后操作，该流程还不能进行编辑！',
-              type: 'warning'
-            })
-          } else {
-            this.toggleProcessDialog(true)
-          }
+          this.curEditIdx = idx
+          this.toggleProcessDialog(true)
+          // if (this.curLuiCheng !== this.steps[idx].tit) {
+          //   this.$message({
+          //     message: '请按照流程先后操作，该流程还不能进行编辑！',
+          //     type: 'warning'
+          //   })
+          // } else {
+          //   this.toggleProcessDialog(true)
+          // }
       }
     },
-    getInfor () {
+    async getInfor () {
+      let ReceiptRate = await this.getReceiptRate()
+      this.getBasicInfor(ReceiptRate)
+    },
+    getBasicInfor (ReceiptRate) {
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
@@ -257,15 +364,16 @@ export default {
           projectName: Info['项目名称'],
           signDepartment: Info['部门'],
           customerName: Info['客户'],
-          isSigned: Info['是否先签约'],
+          // isSigned: Info['是否先签约'],
           swry: Info['商务人员'],
           qyrq: Info['签约日期'],
           htje: Info['合同金额'],
           ysmll: '',
-          xmjl: '',
-          kgrq: '',
-          wgrq: '',
+          xmjl: Info['项目经理'],
+          kgrq: Info['开工日期'] ? Info['开工日期'].slice(0, 10) : '',
+          wgrq: Info['完工日期'] ? Info['完工日期'].slice(0, 10) : '',
           jsj: Info['结算价'],
+          sjj: Info['审计价'],
           ljkp: Info['累计开票'],
           ljsk: Info['累计收款'],
           chl: Info['出货率'],
@@ -290,20 +398,28 @@ export default {
         ]
         for (let i = 0; i < 11; i++) {
           if (Info[this.liuCheng[i]] === 1) {
-            this.curLuiCheng = this.liuCheng[i]
+            this.curLuiCheng = this.liuCheng[i] === '放号' ? '--' : this.liuCheng[i]
+            this.curLuiChengIdx = i
             break
           }
         }
+        this.receiptRateInfo = ReceiptRate.map(item => {
+          let percent = item.fpercent.substr(0, item.fpercent.length - 1) / 100
+          item.ys = this.formBasic.htje * percent
+          item.sj = this.formBasic.ljsk * percent
+          item.ws = item.ys - item.sj
+          return item
+        })
       }).catch((error) => {
         console.log(error)
       })
     },
-    getReceiptRate () {
+    getSwry () {
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>select c.FName,(convert(varchar(50),b.FInteger)+'%')fpercent from t_RPContract a inner join skbl b on a.FContractID=b.FContractID inner join (select FInterID,FName from t_SubMessage where FTypeID=10001) c on c.FInterID=b.FBase1 where a.FContractNo='" + this.curContractNo + "'</FSQL>"
+      tmpData += "<FSQL><![CDATA[select f1 商务人员 from Z_Contract_log where isnull(f1,'')<>'' and FContractNo='" + this.curContractNo + "'  order by fid]]></FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -317,9 +433,103 @@ export default {
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
         let Info = (JSON.parse(HtmlStr))
-        this.receiptRateInfo = Info
+        this.swryHistory = Info
       }).catch((error) => {
         console.log(error)
+      })
+    },
+    getxmjl () {
+      var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
+      tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
+      tmpData += '<soap:Body> '
+      tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
+      tmpData += "<FSQL><![CDATA[select f2 项目经理 from Z_Contract_log where isnull(f2,'')<>'' and FContractNo='" + this.curContractNo + "' order by fid]]></FSQL>"
+      tmpData += '</JA_LIST>'
+      tmpData += '</soap:Body>'
+      tmpData += '</soap:Envelope>'
+
+      this.Http.post('JA_LIST', tmpData
+      ).then(res => {
+        let xml = res.data
+        let parser = new DOMParser()
+        let xmlDoc = parser.parseFromString(xml, 'text/xml')
+        // 提取数据
+        let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
+        let HtmlStr = $(Result).html()
+        let Info = (JSON.parse(HtmlStr))
+        this.xmjlHistory = Info
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+    getReceiptRate () {
+      return new Promise((resolve, reject) => {
+        var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
+        tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
+        tmpData += '<soap:Body> '
+        tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
+        tmpData += "<FSQL>select c.FName,(convert(varchar(50),b.FInteger)+'%')fpercent from t_RPContract a inner join skbl b on a.FContractID=b.FContractID inner join (select FInterID,FName from t_SubMessage where FTypeID=10001) c on c.FInterID=b.FBase1 where a.FContractNo='" + this.curContractNo + "'</FSQL>"
+        tmpData += '</JA_LIST>'
+        tmpData += '</soap:Body>'
+        tmpData += '</soap:Envelope>'
+
+        this.Http.post('JA_LIST', tmpData
+        ).then(res => {
+          let xml = res.data
+          let parser = new DOMParser()
+          let xmlDoc = parser.parseFromString(xml, 'text/xml')
+          // 提取数据
+          let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
+          let HtmlStr = $(Result).html()
+          let Info = (JSON.parse(HtmlStr))
+          resolve(Info)
+        }).catch((error) => {
+          console.log(error)
+        })
+      })
+    },
+    // 标记红色
+    markRed (Idx) {
+      this.steps.map((step, idx) => {
+        if (step.status === 1 && idx < Idx) {
+          var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
+          tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
+          tmpData += '<soap:Body> '
+          tmpData += '<jindu xmlns="http://tempuri.org/">'
+          tmpData += '<FContractNo>' + this.curContractNo + '</FContractNo>'
+          tmpData += '<FType>' + step.tit + '</FType>'
+          tmpData += '<FColor>' + 3 + '</FColor>'
+          tmpData += '</jindu>'
+          tmpData += '</soap:Body>'
+          tmpData += '</soap:Envelope>'
+          this.Http.post('jindu', tmpData
+          ).then(res => {
+            // let xml = res.data
+            // let parser = new DOMParser()
+            // let xmlDoc = parser.parseFromString(xml, 'text/xml')
+            // // 提取数据
+            // let Result = xmlDoc.getElementsByTagName('jinduResponse')[0].getElementsByTagName('jinduResult')[0]
+            // let HtmlStr = $(Result).html()
+            // let Info = (JSON.parse(HtmlStr))[0]
+            // if (Info.code === '1') {
+            //   // this.$message({
+            //   //   message: '确认红色成功!',
+            //   //   type: 'success'
+            //   // })
+            //   // this.refresh()
+            // } else {
+            //   // this.$message({
+            //   //   message: '确认红色失败!',
+            //   //   type: 'error'
+            //   // })
+            // }
+          }).catch((error) => {
+            console.log(error)
+          })
+        }
+        if (idx === 10) {
+          this.getInfor()
+        }
       })
     }
   }
@@ -377,7 +587,7 @@ export default {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      margin-top: 35px;
+      margin-top: 15px;
       margin-bottom: 10px;
     }
   }
@@ -399,6 +609,9 @@ export default {
 }
 .bgYellow{
   background: yellow;
+}
+.bgBlue{
+  background: blue;
 }
 .bgRed{
   background: red;
