@@ -200,13 +200,13 @@
     </el-row>
     <!-- 工程项目总进度 -->
     <!-- 1代表可操作（黄色），0代表不可操作（灰色），2代表操作完成（绿色），3代表警告(红色), 当前的流程蓝色 -->
-    <el-col :span="24" class="TextAlignL"><span class="ModuleTit">工程项目总进度{{curLuiCheng}}--{{curLuiChengIdx}}</span></el-col>
+    <el-col :span="24" class="TextAlignL"><span class="ModuleTit">工程项目总进度</span></el-col>
     <el-col :span="24" class="StepWrap TextAlignL" style="width: 100%;overflow-x: scroll;">
       <div :class="{SetpItem: true, 'NotAllowed': item.status == 0}" v-for="(item, idx) in steps" :key="idx" @click="changeStep(idx)">
         <div :class="{'LineItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3}" v-show="idx > 0"></div>
         <div class="DotItemwrap">
           <div class="TextItem">
-            <p>{{item.tit == '合同签订' || item.tit == '设备到现场' ? formBasic.swry : formBasic.xmjl}}</p>
+            <p>{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' ? formBasic.swry : formBasic.xmjl}}</p>
           </div>
           <div :class="{'DotItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3}"></div>
           <div class="TextItem">
@@ -249,7 +249,8 @@ export default {
   },
   computed: {
     ...mapState({
-      curContractNo: state => state.curContractNo
+      curContractNo: state => state.curContractNo,
+      userInfo: state => state.userInfo
     })
   },
   created () {
@@ -324,8 +325,15 @@ export default {
         //   this.toggleProcessDialog(true)
         //   break
         default:
-          this.curEditIdx = idx
-          this.toggleProcessDialog(true)
+          if (!this.steps[idx].author) {
+            this.$message({
+              message: '对不起，您没有权限对此流程进行编辑！',
+              type: 'warning'
+            })
+          } else {
+            this.curEditIdx = idx
+            this.toggleProcessDialog(true)
+          }
           // if (this.curLuiCheng !== this.steps[idx].tit) {
           //   this.$message({
           //     message: '请按照流程先后操作，该流程还不能进行编辑！',
@@ -338,9 +346,10 @@ export default {
     },
     async getInfor () {
       let ReceiptRate = await this.getReceiptRate()
-      this.getBasicInfor(ReceiptRate)
+      let Author = await this.getAuthor()
+      this.getBasicInfor(ReceiptRate, Author)
     },
-    getBasicInfor (ReceiptRate) {
+    getBasicInfor (ReceiptRate, Author) {
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
@@ -359,57 +368,74 @@ export default {
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
         let Info = (JSON.parse(HtmlStr))[0]
-        this.formBasic = {
-          contractNo: Info['合同号'],
-          projectName: Info['项目名称'],
-          signDepartment: Info['部门'],
-          customerName: Info['客户'],
-          // isSigned: Info['是否先签约'],
-          swry: Info['商务人员'],
-          qyrq: Info['签约日期'],
-          htje: Info['合同金额'],
-          ysmll: '',
-          xmjl: Info['项目经理'],
-          kgrq: Info['开工日期'] ? Info['开工日期'].slice(0, 10) : '',
-          wgrq: Info['完工日期'] ? Info['完工日期'].slice(0, 10) : '',
-          jsj: Info['结算价'],
-          sjj: Info['审计价'],
-          ljkp: Info['累计开票'],
-          ljsk: Info['累计收款'],
-          chl: Info['出货率'],
-          skl: Info['收款率'],
-          jgrq: Info['竣工日期'],
-          zbq: Info['质保期'],
-          zbks: Info['质保起'],
-          zbjs: Info['质保至']
-        }
-        this.steps = [
-          {status: Info['放号'], date: '', tit: '放号'},
-          {status: Info['合同签订'], date: '', tit: '合同签订'},
-          {status: Info['进场施工'], date: '', tit: '进场施工'},
-          {status: Info['设备到现场'], date: '', tit: '设备到现场'},
-          {status: Info['隐蔽验收'], date: '', tit: '隐蔽验收'},
-          {status: Info['安装调试'], date: '', tit: '安装调试'},
-          {status: Info['竣工验收'], date: '', tit: '竣工验收'},
-          {status: Info['审价结算'], date: '', tit: '审价结算'},
-          {status: Info['项目移交'], date: '', tit: '项目移交'},
-          {status: Info['质保开始'], date: '', tit: '质保开始'},
-          {status: Info['质保结束'], date: '', tit: '质保结束'}
-        ]
-        for (let i = 0; i < 11; i++) {
-          if (Info[this.liuCheng[i]] === 1) {
-            this.curLuiCheng = this.liuCheng[i] === '放号' ? '--' : this.liuCheng[i]
-            this.curLuiChengIdx = i
-            break
+        if (Info) {
+          let curTimeStamp = (new Date()).getTime()
+          let zbTimeStamp = (new Date(Info['质保至'])).getTime()
+          this.formBasic = {
+            contractNo: Info['合同号'],
+            projectName: Info['项目名称'],
+            signDepartment: Info['部门'],
+            customerName: Info['客户'],
+            // isSigned: Info['是否先签约'],
+            swry: Info['商务人员'],
+            qyrq: Info['签约日期'],
+            htje: Info['合同金额'],
+            ysmll: '',
+            xmjl: Info['项目经理'],
+            kgrq: Info['开工日期'] ? Info['开工日期'].slice(0, 10) : '',
+            wgrq: Info['完工日期'] ? Info['完工日期'].slice(0, 10) : '',
+            jsj: Info['结算价'],
+            sjj: Info['审计价'],
+            ljkp: Info['累计开票'],
+            ljsk: Info['累计收款'],
+            chl: Info['出货率'],
+            skl: Info['收款率'],
+            jgrq: Info['竣工日期'],
+            zbq: Info['质保期'],
+            zbks: Info['质保起'],
+            zbjs: Info['质保至']
           }
+          let ys = ReceiptRate[2].fpercent.slice(0, ReceiptRate[2].fpercent.length - 1)
+          let skl = Info['收款率'].slice(0, Info['收款率'].length - 1)
+          let hasShouKuang = Number(ys) < Number(skl)
+          // console.log(ys)
+          // console.log(skl)
+          // console.log(hasShouKuang)
+          this.steps = [
+            {status: Info['放号'], date: '', tit: '放号', author: Author['放号']},
+            {status: Info['合同签订'], date: '', tit: '合同签订', author: Author['合同签订']},
+            {status: Info['进场施工'], date: '', tit: '进场施工', author: Author['进场施工']},
+            {status: Info['设备到现场'] === 2 && !hasShouKuang ? 3 : Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
+            // {status: Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
+            {status: Info['隐蔽验收'], date: '', tit: '隐蔽验收', author: Author['隐蔽验收']},
+            {status: Info['安装调试'], date: '', tit: '安装调试', author: Author['安装调试']},
+            {status: Info['竣工验收'], date: '', tit: '竣工验收', author: Author['竣工验收']},
+            {status: Info['审价结算'], date: '', tit: '审价结算', author: Author['审价结算']},
+            {status: Info['项目移交'], date: '', tit: '项目移交', author: Author['项目移交']},
+            {status: Info['质保开始'], date: '', tit: '质保开始', author: Author['质保开始']},
+            {status: curTimeStamp > zbTimeStamp ? (Info['收款率'] === '100.00%' ? 2 : 3) : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束']}
+            // {status: curTimeStamp > zbTimeStamp && Info['收款率'] === '100.00%' ? 3 : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束']}
+          ]
+          for (let i = 0; i < 11; i++) {
+            if (Info[this.liuCheng[i]] === 1) {
+              this.curLuiCheng = this.liuCheng[i] === '放号' ? '--' : this.liuCheng[i]
+              this.curLuiChengIdx = i
+              break
+            }
+          }
+          this.receiptRateInfo = ReceiptRate.map(item => {
+            let percent = item.fpercent.substr(0, item.fpercent.length - 1) / 100
+            item.ys = this.formBasic.htje * percent
+            item.sj = this.formBasic.ljsk * percent
+            item.ws = item.ys - item.sj
+            return item
+          })
+        } else {
+          this.$message({
+            message: '暂无信息!',
+            type: 'info'
+          })
         }
-        this.receiptRateInfo = ReceiptRate.map(item => {
-          let percent = item.fpercent.substr(0, item.fpercent.length - 1) / 100
-          item.ys = this.formBasic.htje * percent
-          item.sj = this.formBasic.ljsk * percent
-          item.ws = item.ys - item.sj
-          return item
-        })
       }).catch((error) => {
         console.log(error)
       })
@@ -482,6 +508,33 @@ export default {
           let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
           let HtmlStr = $(Result).html()
           let Info = (JSON.parse(HtmlStr))
+          console.log(Info)
+          resolve(Info)
+        }).catch((error) => {
+          console.log(error)
+        })
+      })
+    },
+    getAuthor () {
+      return new Promise((resolve, reject) => {
+        var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
+        tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
+        tmpData += '<soap:Body> '
+        tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
+        tmpData += '<FSQL>select isnull(f_102,0)放号,isnull(f_103,0)合同签订,isnull(f_104,0)进场施工,isnull(f_105,0)设备到现场,isnull(f_106,0)隐蔽验收,isnull(f_107,0)安装调试,isnull(f_108,0)竣工验收,isnull(f_109,0)审价结算,isnull(f_110,0)项目移交,isnull(f_111,0)质保开始,isnull(f_112,0)质保结束 from t_emp where fitemid=' + this.userInfo.fempid + '</FSQL>'
+        tmpData += '</JA_LIST>'
+        tmpData += '</soap:Body>'
+        tmpData += '</soap:Envelope>'
+
+        this.Http.post('JA_LIST', tmpData
+        ).then(res => {
+          let xml = res.data
+          let parser = new DOMParser()
+          let xmlDoc = parser.parseFromString(xml, 'text/xml')
+          // 提取数据
+          let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
+          let HtmlStr = $(Result).html()
+          let Info = (JSON.parse(HtmlStr))[0]
           resolve(Info)
         }).catch((error) => {
           console.log(error)

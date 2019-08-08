@@ -4,8 +4,8 @@ import utils from './utils.js'
 import store from '../vuex/store'
 
 // let wsdlurl = '/api/Service1.asmx'
-let wsdlurl = 'http://111.231.134.126:8090/Service1.asmx'
-// let baseUrl = 'http://111.231.134.126:8090/'
+let wsdlurl = 'http://192.168.1.9:8090/Service1.asmx'
+// let wsdlurl = 'http://111.231.134.126:8090/Service1.asmx'
 
 const CancelToken = axios.CancelToken
 const source = CancelToken.source()

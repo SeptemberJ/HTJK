@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     uploadAdr () {
-      return 'http://plant.fs-elliott.cn:8082/fushengJK/uploadFileZT?mulu=' + `${this.contractNo}`
+      return 'http://192.168.1.13:8081/fushengJK/uploadFileZT?mulu=' + `${this.contractNo}`
     }
   },
   watch: {
@@ -414,7 +414,8 @@ export default {
       tmpData += '<jindu xmlns="http://tempuri.org/">'
       tmpData += '<FContractNo>' + this.contractNo + '</FContractNo>'
       tmpData += '<FType>' + this.processName + '</FType>'
-      tmpData += '<FColor>' + (this.curLuiChengIdx > this.curEditIdx ? 3 : 1) + '</FColor>'
+      tmpData += '<FColor>10</FColor>'
+      // tmpData += '<FColor>' + (this.curLuiChengIdx > this.curEditIdx ? 3 : 1) + '</FColor>'
       tmpData += '</jindu>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'

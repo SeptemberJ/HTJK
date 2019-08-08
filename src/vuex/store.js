@@ -10,6 +10,8 @@ const vuexLocal = new VuexPersistence({
 
 const state = {
   useName: 'liubai',
+  userInfo: null,
+  pathName: null,
   curContractNo: '',
   resultDataOrigin: []
 }
@@ -20,6 +22,12 @@ const actions = {
   },
   updateResultData ({commit, state}, Data) {
     commit('setResultData', Data)
+  },
+  updateUserInfo ({commit, state}, UserInfo) {
+    commit('setUserInfo', UserInfo)
+  },
+  changePath ({commit, state}, PATH) {
+    commit('setPath', PATH)
   }
 }
 
@@ -29,6 +37,12 @@ const mutations = {
   },
   setResultData (state, Data) {
     state.resultDataOrigin = Data
+  },
+  setUserInfo (state, UserInfo) {
+    state.userInfo = UserInfo
+  },
+  setPath (state, PATH) {
+    state.pathName = PATH
   }
 }
 

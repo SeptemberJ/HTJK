@@ -3,30 +3,39 @@ import VueRouter from 'vue-router'
 import InfoDynamicTable from '@/pages/InfoDynamicTable'
 import FilterTable from '@/pages/FilterTable'
 import Contract from '@/pages/Contract'
-// import HelloWorld from '@/components/HelloWorld'
+import Login from '@/pages/Login'
+import store from '../vuex/store'
+import {getCookie} from '@/util/utils'
 
 Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
     {
-      path: '/InfoDynamicTable',
-      name: 'InfoDynamicTable',
-      component: InfoDynamicTable,
+      path: '/Login',
+      name: 'Login',
+      component: Login,
       meta: {requireAuth: false}
     },
     {
-      path: '/',
+      path: '/InfoDynamicTable',
+      name: 'InfoDynamicTable',
+      component: InfoDynamicTable,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/FilterTable',
       name: 'FilterTable',
       component: FilterTable,
-      meta: {requireAuth: false}
+      meta: {requireAuth: true}
     },
     {
       path: '/Contract',
       name: 'Contract',
       component: Contract,
-      meta: {requireAuth: false}
-    }
+      meta: {requireAuth: true}
+    },
+    {path: '*', redirect: '/Login'}
   ]
 })
 // export default new Router({
@@ -40,20 +49,20 @@ const router = new VueRouter({
 // })
 
 // 登录控制
-// router.beforeEach((to, from, next) => {
-//   store.dispatch('changePath', to.name)
-//   if (to.meta.requireAuth) {
-//     if (getCookie('Fs_14a808c40bba58c2c')) {
-//       next()
-//     } else {
-//       localStorage.clear()
-//       next({
-//         path: '/Login'
-//       })
-//     }
-//   } else {
-//     next()
-//   }
-//   store.dispatch('changePath', to.name)
-// })
+router.beforeEach((to, from, next) => {
+  store.dispatch('changePath', to.name)
+  if (to.meta.requireAuth) {
+    if (getCookie('ZT_14a808c40bba58c2c')) {
+      next()
+    } else {
+      localStorage.clear()
+      next({
+        path: '/Login'
+      })
+    }
+  } else {
+    next()
+  }
+  store.dispatch('changePath', to.name)
+})
 export default router
