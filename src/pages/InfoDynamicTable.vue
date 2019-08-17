@@ -3,17 +3,22 @@
     <el-row>
       <!-- 基本信息 -->
       <el-col :span="24">
-        <div class="ModuleTit TextAlignL">项目信息</div>
-        <el-form ref="formBasic" :model="formBasic" label-width="90px" size="small" class="DisabledNormal MarginT_20"  style="padding-right: 20px;">
+        <div class="ModuleTit TextAlignL">项目信息 <el-button type="info" size="small" icon="el-icon-close" @click="back"></el-button></div>
+        <el-form ref="formBasic" :model="formBasic" label-width="100px" size="small" class="DisabledNormal MarginT_20"  style="padding-right: 20px;">
           <el-row>
-            <el-col :span="10">
+            <el-col :span="8">
               <el-form-item label="合同编号">
                 <el-input v-model="formBasic.contractNo" disabled></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="14">
+            <el-col :span="10">
               <el-form-item label="项目名称">
                 <el-input v-model="formBasic.projectName" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="签约日期">
+                <el-input v-model="formBasic.qyrq" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -23,14 +28,14 @@
                 <el-input v-model="formBasic.signDepartment" disabled></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="10">
               <el-form-item label="客户名称">
                 <el-input v-model="formBasic.customerName" disabled></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="签约日期">
-                <el-input v-model="formBasic.qyrq" disabled></el-input>
+            <el-col :span="6">
+              <el-form-item label="签约合同金额">
+                <el-input v-model="formBasic.qyhtje"></el-input>
               </el-form-item>
             </el-col>
             <!-- <el-col :span="8">
@@ -48,7 +53,7 @@
                   width="100"
                   trigger="click">
                   <div>
-                    <p v-for="(people, idx) in swryHistory" :key="idx">{{people['商务人员']}}</p>
+                    <p v-for="(people, idx) in swryHistory" :key="idx">{{people['商务人员']}} <span style="float:right;">{{people['Column1']}}</span></p>
                   </div>
                   <el-button type="text" style="width:25%;display: inline-block;" slot="reference">历史记录</el-button>
                 </el-popover>
@@ -62,7 +67,7 @@
                   width="100"
                   trigger="click">
                   <div>
-                    <p v-for="(people, idx) in xmjlHistory" :key="idx">{{people['项目经理']}}</p>
+                    <p v-for="(people, idx) in xmjlHistory" :key="idx">{{people['项目经理']}}  <span style="float:right;">{{people['Column1']}}</span></p>
                   </div>
                   <el-button type="text" style="width:25%;display: inline-block;" slot="reference">历史记录</el-button>
                 </el-popover>
@@ -74,42 +79,40 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="预算毛利率">
-                <el-input v-model="formBasic.ysmll" disabled></el-input>
+              <el-form-item label="结算价">
+                <el-input v-model="formBasic.jsj" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="6">
               <el-form-item label="开工日期">
-                <el-date-picker
+                <el-date-picker style="width: 100%;"
                   v-model="formBasic.kgrq"
                   type="date"
                   value-format="yyyy-MM-dd"
                   placeholder="选择日期">
                 </el-date-picker>
-                <!-- <el-input v-model="formBasic.kgrq"></el-input> -->
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="完工日期">
-                <el-date-picker
+                <el-date-picker style="width: 100%;"
                   v-model="formBasic.wgrq"
                   type="date"
                   value-format="yyyy-MM-dd"
                   placeholder="选择日期">
                 </el-date-picker>
-                <!-- <el-input v-model="formBasic.wgrq"></el-input> -->
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="结算价">
-                <el-input v-model="formBasic.jsj" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="审计价">
                 <el-input v-model="formBasic.sjj" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="预算毛利率">
+                <el-input v-model="formBasic.ysmll" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -157,7 +160,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-button class="MarginB_20" type="danger" @click="save">保 存</el-button>
+          <el-button class="MarginB_20" type="danger" size="small" @click="save">保 存</el-button>
         </el-form>
       </el-col>
       <!-- 收款比例 -->
@@ -175,9 +178,9 @@
             <el-row>
               <el-col :span="4">{{idx + 1}}. {{item.FName}}</el-col>
               <el-col :span="4">{{item.fpercent}}</el-col>
-              <el-col :span="4">{{item.ys}}</el-col>
-              <el-col :span="4">{{item.sj}}</el-col>
-              <el-col :span="4">{{item.ws}}</el-col>
+              <el-col :span="4">{{item.fyingshou}}</el-col>
+              <el-col :span="4">{{item.fshiji}}</el-col>
+              <el-col :span="4">{{(item.fyingshou - item.fshiji).toFixed(2)}}</el-col>
             </el-row>
             <!-- <span>{{idx + 1}}. {{item.FName}}</span>
             <span style="margin-left: 100px;">{{item.fpercent}}</span> -->
@@ -206,7 +209,9 @@
         <div :class="{'LineItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3}" v-show="idx > 0"></div>
         <div class="DotItemwrap">
           <div class="TextItem">
-            <p>{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' ? formBasic.swry : formBasic.xmjl}}</p>
+            <p>{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' || item.tit == '质保结束' ? formBasic.swry : formBasic.xmjl}}</p>
+            <p v-if="item.tit == '设备到现场'">{{wsjeSB > 0 ? wsjeSB : ''}}</p>
+            <p v-if="item.status == 3 && item.tit == '质保结束'">{{formBasic.wsje > 0 ? formBasic.wsje : ''}}</p>
           </div>
           <div :class="{'DotItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3}"></div>
           <div class="TextItem">
@@ -214,6 +219,10 @@
           </div>
         </div>
       </div>
+    </el-col>
+    <!-- 返回 -->
+    <el-col :span="24" class="MarginT_20 MarginB_20">
+      <el-button type="info" size="small" icon="el-icon-arrow-left" @click="back">返 回</el-button>
     </el-col>
     <!-- ProcessEdit -->
     <ProcessEdit v-if="ifEdit" :curTimeStamp="curTimeStamp" :processStatus="processStatus" :processName="processName" :curEditIdx="curEditIdx" :curLuiChengIdx="curLuiChengIdx" :contractNo="formBasic.contractNo" @markRed="markRed" @refresh="getInfor" @toggleProcessDialog="toggleProcessDialog"/>
@@ -238,6 +247,7 @@ export default {
       xmjlHistory: [],
       swryHistory: [],
       receiptRateInfo: [],
+      wsjeSB: null,
       warnList: ['预收款未收齐'],
       steps: [],
       curTimeStamp: '',
@@ -262,6 +272,10 @@ export default {
     toggleProcessDialog (val) {
       this.ifEdit = val
     },
+    // 返回
+    back () {
+      this.$router.push({name: 'FilterTable'})
+    },
     // 保存编辑信息
     save () {
       let data = {
@@ -270,6 +284,7 @@ export default {
             FContractNo: this.curContractNo,
             f1: this.formBasic.swry,
             f2: this.formBasic.xmjl,
+            famount: this.formBasic.qyhtje,
             fsdate: this.formBasic.kgrq ? this.formBasic.kgrq : '',
             fedate: this.formBasic.wgrq ? this.formBasic.wgrq : ''
           }
@@ -368,9 +383,11 @@ export default {
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
         let Info = (JSON.parse(HtmlStr))[0]
+        console.log('Info---', Info)
         if (Info) {
           let curTimeStamp = (new Date()).getTime()
-          let zbTimeStamp = (new Date(Info['质保至'])).getTime()
+          let zbTimeStamp = Info['质保至'] ? (new Date(Info['质保至'])).getTime() : curTimeStamp
+          let hasShouKuang = true
           this.formBasic = {
             contractNo: Info['合同号'],
             projectName: Info['项目名称'],
@@ -380,6 +397,7 @@ export default {
             swry: Info['商务人员'],
             qyrq: Info['签约日期'],
             htje: Info['合同金额'],
+            qyhtje: Info['签约合同金额'],
             ysmll: '',
             xmjl: Info['项目经理'],
             kgrq: Info['开工日期'] ? Info['开工日期'].slice(0, 10) : '',
@@ -393,11 +411,14 @@ export default {
             jgrq: Info['竣工日期'],
             zbq: Info['质保期'],
             zbks: Info['质保起'],
-            zbjs: Info['质保至']
+            zbjs: Info['质保至'],
+            wsje: Info['未收金额']
           }
-          let ys = ReceiptRate[2].fpercent.slice(0, ReceiptRate[2].fpercent.length - 1)
-          let skl = Info['收款率'].slice(0, Info['收款率'].length - 1)
-          let hasShouKuang = Number(ys) < Number(skl)
+          if (ReceiptRate[2]) {
+            let ys = ReceiptRate[2].fpercent.slice(0, ReceiptRate[2].fpercent.length - 1)
+            let skl = Info['收款率'].slice(0, Info['收款率'].length - 1)
+            hasShouKuang = Number(ys) <= Number(skl)
+          }
           // console.log(ys)
           // console.log(skl)
           // console.log(hasShouKuang)
@@ -405,7 +426,7 @@ export default {
             {status: Info['放号'], date: '', tit: '放号', author: Author['放号']},
             {status: Info['合同签订'], date: '', tit: '合同签订', author: Author['合同签订']},
             {status: Info['进场施工'], date: '', tit: '进场施工', author: Author['进场施工']},
-            {status: Info['设备到现场'] === 2 && !hasShouKuang ? 3 : Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
+            {status: Info['设备到现场'] === 2 && (!hasShouKuang || Number(this.wsjeSB) > 0) ? 3 : Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
             // {status: Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
             {status: Info['隐蔽验收'], date: '', tit: '隐蔽验收', author: Author['隐蔽验收']},
             {status: Info['安装调试'], date: '', tit: '安装调试', author: Author['安装调试']},
@@ -423,13 +444,17 @@ export default {
               break
             }
           }
-          this.receiptRateInfo = ReceiptRate.map(item => {
-            let percent = item.fpercent.substr(0, item.fpercent.length - 1) / 100
-            item.ys = this.formBasic.htje * percent
-            item.sj = this.formBasic.ljsk * percent
-            item.ws = item.ys - item.sj
-            return item
-          })
+          // 设备到现场的未收金额
+          if (ReceiptRate[1]) {
+            this.wsjeSB = (ReceiptRate[1].fyingshou - ReceiptRate[1].fshiji).toFixed(2)
+          } else {
+            this.wsjeSB = '0.00'
+          }
+          this.receiptRateInfo = ReceiptRate
+          // this.receiptRateInfo = ReceiptRate.map(item => {
+          //   item.sj = (item.fyingshou - item.fshiji).toFixed(2)
+          //   return item
+          // })
         } else {
           this.$message({
             message: '暂无信息!',
@@ -445,7 +470,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL><![CDATA[select f1 商务人员 from Z_Contract_log where isnull(f1,'')<>'' and FContractNo='" + this.curContractNo + "'  order by fid]]></FSQL>"
+      tmpData += "<FSQL><![CDATA[select f1 商务人员,convert(varchar(50),f1date,23) from Z_Contract_log where isnull(f1,'')<>'' and FContractNo='" + this.curContractNo + "'  order by fid]]></FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -459,6 +484,7 @@ export default {
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
         let Info = (JSON.parse(HtmlStr))
+        console.log('reyuan', Info)
         this.swryHistory = Info
       }).catch((error) => {
         console.log(error)
@@ -469,7 +495,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL><![CDATA[select f2 项目经理 from Z_Contract_log where isnull(f2,'')<>'' and FContractNo='" + this.curContractNo + "' order by fid]]></FSQL>"
+      tmpData += "<FSQL><![CDATA[select f2 项目经理,convert(varchar(50),f2date,23) from Z_Contract_log where isnull(f2,'')<>'' and FContractNo='" + this.curContractNo + "' order by fid]]></FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -494,7 +520,7 @@ export default {
         tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
         tmpData += '<soap:Body> '
         tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-        tmpData += "<FSQL>select c.FName,(convert(varchar(50),b.FInteger)+'%')fpercent from t_RPContract a inner join skbl b on a.FContractID=b.FContractID inner join (select FInterID,FName from t_SubMessage where FTypeID=10001) c on c.FInterID=b.FBase1 where a.FContractNo='" + this.curContractNo + "'</FSQL>"
+        tmpData += "<FSQL>exec z_skbl '" + this.curContractNo + "'</FSQL>"
         tmpData += '</JA_LIST>'
         tmpData += '</soap:Body>'
         tmpData += '</soap:Envelope>'
@@ -508,7 +534,7 @@ export default {
           let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
           let HtmlStr = $(Result).html()
           let Info = (JSON.parse(HtmlStr))
-          console.log(Info)
+          console.log('ReceiptRate--', Info)
           resolve(Info)
         }).catch((error) => {
           console.log(error)
@@ -614,7 +640,9 @@ export default {
   height: 42px;
   background: #ddd;
   padding-left: 5px;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   line-height: 42px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -640,7 +668,7 @@ export default {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      margin-top: 15px;
+      margin-top: 10px;
       margin-bottom: 10px;
     }
   }
@@ -651,6 +679,7 @@ export default {
   }
 }
 .TextItem{
+  height: 30px;
   font-size: 12px;
   display: flex;
   flex-direction: column;
