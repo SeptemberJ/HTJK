@@ -290,7 +290,7 @@
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="剩余未收"
+            prop="未收金额"
             label="剩余未收"
             width="100"
             show-overflow-tooltip>
@@ -381,12 +381,6 @@
           </el-table-column>
           <el-table-column
             prop="质保至"
-            label="质保至"
-            width="120"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-            prop="质保结束"
             label="质保结束"
             width="120"
             show-overflow-tooltip>

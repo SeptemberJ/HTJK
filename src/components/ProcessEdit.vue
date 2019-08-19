@@ -13,7 +13,7 @@
           <div v-else>
             <span class="secondTit">销售合同</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['合同签订']['销售合同']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '销售合同')"></i>
@@ -27,7 +27,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['进场施工']['开工报告'].length > 0">开工报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['进场施工']['开工报告']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '开工报告')"></i>
@@ -35,7 +35,7 @@
             </p>
             <span class="secondTit" v-if="fileList['进场施工']['工程交底会议'].length > 0">工程交底会议</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['进场施工']['工程交底会议']" :key="'工程交底会议' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工程交底会议')"></i>
@@ -43,7 +43,7 @@
             </p>
             <span class="secondTit" v-if="fileList['进场施工']['项目流转单'].length > 0">项目流转单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['进场施工']['项目流转单']" :key="'项目流转单' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '项目流转单')"></i>
@@ -57,7 +57,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['设备到现场']['设备签收单'].length > 0">设备签收单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['设备到现场']['设备签收单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -72,7 +72,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['隐蔽验收']['试气报告'].length > 0">试气报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['隐蔽验收']['试气报告']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -81,7 +81,7 @@
             </p>
             <span class="secondTit" v-if="fileList['隐蔽验收']['试压报告'].length > 0">试压报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['隐蔽验收']['试压报告']" :key="'试压报告' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -90,7 +90,7 @@
             </p>
             <span class="secondTit" v-if="fileList['隐蔽验收']['灌水试验报告'].length > 0">灌水试验报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['隐蔽验收']['灌水试验报告']" :key="'灌水试验报告' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -105,7 +105,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['安装调试']['调试验收单'].length > 0">调试验收单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['安装调试']['调试验收单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -114,7 +114,7 @@
             </p>
             <span class="secondTit" v-if="fileList['安装调试']['设备移交单'].length > 0">设备移交单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['安装调试']['设备移交单']" :key="'设备移交单' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -129,7 +129,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['竣工验收']['竣工图'].length > 0">竣工图</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['竣工验收']['竣工图']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '竣工图')"></i>
@@ -143,7 +143,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['审价结算']['审计报告'].length > 0">审计报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['审价结算']['审计报告']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '审计报告')"></i>
@@ -157,7 +157,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['项目移交']['同竣工验收资料'].length > 0">同竣工验收资料</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['项目移交']['同竣工验收资料']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '同竣工验收资料')"></i>
@@ -171,7 +171,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['质保开始']['调试验收单'].length > 0">调试验收单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['质保开始']['调试验收单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '调试验收单')"></i>
@@ -185,7 +185,7 @@
           <div v-else>
             <!-- <span class="secondTit" v-if="fileList['质保结束']['文件'].length > 0">文件</span> -->
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['质保结束']['文件']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file.fileUrl">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '文件')"></i>
@@ -875,6 +875,16 @@ export default {
       this[formName].fileName = file.name
     },
     deleteFile (file, stage) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.sureDeleteFile(file, stage)
+      }).catch(() => {
+      })
+    },
+    sureDeleteFile (file, stage) {
       // 删除文件
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
@@ -991,7 +1001,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>select fcontractno 合同号,ftype 阶段,fstage,'http://plant.fs-elliott.cn:8082/zetian_file/'+fcontractno+'/'+fpath 文件路径,convert(varchar(50),fdate,23)fdate,isnull(fper,0)fper from Z_FILE where fcontractno='" + this.contractNo + "' and ftype='" + this.processName + "'</FSQL>"
+      tmpData += "<FSQL>select fcontractno 合同号,ftype 阶段,fstage,'http://192.168.1.13:8081/zetian_file/'+fcontractno+'/'+fpath 文件路径,convert(varchar(50),fdate,23)fdate,isnull(fper,0)fper from Z_FILE where fcontractno='" + this.contractNo + "' and ftype='" + this.processName + "'</FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -1066,12 +1076,15 @@ export default {
     },
     // 审价金额
     saveSjPrice () {
+      // if (!this.formAppend.sjPrice) {
+      //   this.$message({
+      //     message: '请输入审价金额!',
+      //     type: 'warning'
+      //   })
+      //   return false
+      // } else {
       if (!this.formAppend.sjPrice) {
-        this.$message({
-          message: '请输入审价金额!',
-          type: 'warning'
-        })
-        return false
+        this.surefinish()
       } else {
         var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
         tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
@@ -1104,6 +1117,7 @@ export default {
           console.log(error)
         })
       }
+      // }
     },
     // 保存质保开始日期
     saveZbksDate () {
@@ -1214,14 +1228,15 @@ export default {
           }
           break
         case '审价结算':
-          if (this.fileList['审价结算']['审计报告'].length === 0) {
-            this.$message({
-              message: '文件尚未上传完整，目前不能确认完成!',
-              type: 'warning'
-            })
-          } else {
-            this.saveSjPrice()
-          }
+          this.saveSjPrice()
+          // if (this.fileList['审价结算']['审计报告'].length === 0) {
+          //   this.$message({
+          //     message: '文件尚未上传完整，目前不能确认完成!',
+          //     type: 'warning'
+          //   })
+          // } else {
+          //   this.saveSjPrice()
+          // }
           break
         case '项目移交':
           if (this.fileList['项目移交']['同竣工验收资料'].length === 0) {
