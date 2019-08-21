@@ -10,7 +10,8 @@
             <el-form ref="formFilter" :model="formFilter" label-width="70px" label-position="left" size="mini">
               <el-col :span="12">
                 <el-form-item label="签约部门">
-                  <el-select class="WidthFull" @change="changeFilter" v-model="formFilter.signDepartment" placeholder="请选择">
+                  <!--  @change="changeFilter"  -->
+                  <el-select class="WidthFull" v-model="formFilter.signDepartment" placeholder="请选择">
                     <el-option
                       v-for="item in signDepartmentList"
                       :key="item.FName"
@@ -22,7 +23,7 @@
               </el-col>
               <el-col :span="11" :offset="1">
                 <el-form-item label="签约年份">
-                  <el-select class="WidthFull" @change="changeFilter" v-model="formFilter.signYear" placeholder="请选择">
+                  <el-select class="WidthFull" v-model="formFilter.signYear" placeholder="请选择">
                     <el-option
                       v-for="item in signYearList"
                       :key="item.FName"
@@ -34,9 +35,9 @@
               </el-col>
               <el-col :span="24">
                 <el-form-item label="合同金额">
-                  <el-input-number v-model="formFilter.contractSumS" @change="changeFilter" :controls="false" placeholder="起始金额"></el-input-number>
+                  <el-input-number v-model="formFilter.contractSumS" :controls="false" placeholder="起始金额"></el-input-number>
                     <span style="width: 80px;text-align:center;display:inline-block;">——</span>
-                  <el-input-number v-model="formFilter.contractSumE" @change="changeFilter" :controls="false" placeholder="截止金额"></el-input-number>
+                  <el-input-number v-model="formFilter.contractSumE" :controls="false" placeholder="截止金额"></el-input-number>
                   <!-- <el-select v-model="formFilter.contractPrice" placeholder="请选择">
                     <el-option
                       v-for="item in contractPriceList"
@@ -211,19 +212,20 @@
                     <section>
                       <p class="MarginT_10" style="text-align: left;padding-bottom: 5px;">合同号</p>
                       <div class="vagueSearchBlock">
-                        <el-input  @blur="changeFilter" @keyup.enter.native='enterEvent'  v-model="formFilter.contractNo" clearable size="mini"></el-input>
+                        <!-- @blur="changeFilter" @keyup.enter.native='enterEvent' -->
+                        <el-input v-model="formFilter.contractNo" clearable size="mini"></el-input>
                       </div>
                     </section>
                     <section>
                       <p class="MarginT_10" style="text-align: left;padding-bottom: 5px;">项目编号</p>
                       <div class="vagueSearchBlock">
-                        <el-input  @blur="changeFilter" @keyup.enter.native='enterEvent'  v-model="formFilter.projectNumber" clearable size="mini"></el-input>
+                        <el-input v-model="formFilter.projectNumber" clearable size="mini"></el-input>
                       </div>
                     </section>
                     <section>
                       <p class="MarginT_10" style="text-align: left;padding-bottom: 5px;">客户名称</p>
                       <div class="vagueSearchBlock">
-                        <el-input  @blur="changeFilter" @keyup.enter.native='enterEvent'  v-model="formFilter.customer" clearable size="mini"></el-input>
+                        <el-input v-model="formFilter.customer" clearable size="mini"></el-input>
                       </div>
                     </section>
                   </el-col>
@@ -424,6 +426,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { Loading } from 'element-ui'
 import $ from 'jquery'
 export default {
   name: 'FilterTable',
@@ -571,6 +574,11 @@ export default {
     },
     // 精确查询
     search () {
+      let loadingInstance = Loading.service({
+        lock: true,
+        text: '加载中',
+        spinner: 'el-icon-loading'
+      })
       this.getTotal()
       let contractSumS = "''"
       let contractSumE = "''"
@@ -602,8 +610,10 @@ export default {
           item['完工日期'] = item['完工日期'] ? item['完工日期'].slice(0, 10) : ''
           return item
         })
+        loadingInstance.close()
       }).catch((error) => {
         console.log(error)
+        loadingInstance.close()
       })
     },
     // 分页总数

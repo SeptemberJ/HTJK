@@ -220,14 +220,12 @@
                       </el-row>
                     </el-form-item>
                   </el-col>
-                  <!-- <el-col :span="9">
-                    <el-form-item label="完成比列" prop="percent" class="TextAlignL">
-                      <el-input v-model="formHtqd.percent" style="width: 150px;">
-                        <el-button slot="append">%</el-button>
-                      </el-input>
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formHtqd.checked">无必要文件</el-checkbox>
                     </el-form-item>
-                  </el-col> -->
-                  <el-col :span="12" class="TextAlignR">
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
                     <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formHtqd', '销售合同')">提 交</el-button>
                   </el-col>
               </el-row>
@@ -257,7 +255,12 @@
                     </el-row>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12" class="TextAlignR">
+                <el-col :span="8">
+                  <el-form-item label="" prop="checked" class="TextAlignL">
+                    <el-checkbox v-model="formJcsg_kgbg.checked">无必要文件</el-checkbox>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4" class="TextAlignR">
                   <el-button type="primary" @click="uploadFile('formJcsg_kgbg', '开工报告')">提 交</el-button>
                 </el-col>
               </el-row>
@@ -284,7 +287,12 @@
                     </el-row>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12" class="TextAlignR">
+                <el-col :span="8">
+                  <el-form-item label="" prop="checked" class="TextAlignL">
+                    <el-checkbox v-model="formJcsg_gcjdhy.checked">无必要文件</el-checkbox>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4" class="TextAlignR">
                   <el-button type="primary" @click="uploadFile('formJcsg_gcjdhy', '工程交底会议')">提 交</el-button>
                 </el-col>
               </el-row>
@@ -311,7 +319,12 @@
                     </el-row>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12" class="TextAlignR">
+                <el-col :span="8">
+                  <el-form-item label="" prop="checked" class="TextAlignL">
+                    <el-checkbox v-model="formJcsg_xmlzd.checked">无必要文件</el-checkbox>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4" class="TextAlignR">
                   <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formJcsg_xmlzd', '项目流转单')">提 交</el-button>
                 </el-col>
               </el-row>
@@ -321,7 +334,7 @@
           <section v-if="processName == '设备到现场'">
             <el-form :model="formSbdxc" :rules="rulesFile" ref="formSbdxc" label-width="100px" label-position="left">
               <el-row>
-                  <el-col :span="12">
+                  <el-col :span="9">
                     <el-form-item label="设备签收单" prop="fileName" class="TextAlignL">
                       <el-row>
                         <el-upload
@@ -348,6 +361,11 @@
                       </el-input>
                     </el-form-item>
                   </el-col>
+                  <el-col :span="3">
+                    <el-form-item label="" prop="checked" class="TextAlignL" label-width="1px">
+                      <el-checkbox v-model="formSbdxc.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
                   <el-col :span="3" class="TextAlignR">
                     <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formSbdxc', '设备签收单')">提 交</el-button>
                   </el-col>
@@ -358,7 +376,7 @@
           <section v-if="processName == '隐蔽验收'">
             <el-form :model="formYbys_sqbg" :rules="rulesFile" ref="formYbys_sqbg" label-width="120px" label-position="left">
               <el-row>
-                <el-col :span="12">
+                <el-col :span="9">
                   <el-form-item label="试气报告" prop="fileName" class="TextAlignL">
                     <el-row>
                       <el-upload
@@ -379,10 +397,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="9">
-                  <el-form-item label="完成比列" prop="percent" class="TextAlignL">
+                  <el-form-item label="完成比列" prop="percent" class="TextAlignL" label-width="80px">
                     <el-input v-model="formYbys_sqbg.percent" style="width: 150px;">
                       <el-button slot="append">%</el-button>
                     </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="" prop="checked" class="TextAlignL" label-width="1px">
+                    <el-checkbox v-model="formYbys_sqbg.checked">无必要文件</el-checkbox>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" class="TextAlignR">
@@ -392,7 +415,7 @@
             </el-form>
             <el-form :model="formYbys_sybg" :rules="rulesFile" ref="formYbys_sybg" label-width="120px" label-position="left">
               <el-row>
-                <el-col :span="12">
+                <el-col :span="9">
                   <el-form-item label="试压报告" prop="fileName" class="TextAlignL">
                     <el-row>
                       <el-upload
@@ -413,10 +436,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="9">
-                  <el-form-item label="完成比列" prop="percent" class="TextAlignL">
+                  <el-form-item label="完成比列" prop="percent" class="TextAlignL" label-width="80px">
                     <el-input v-model="formYbys_sybg.percent" style="width: 150px;">
                       <el-button slot="append">%</el-button>
                     </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="" prop="checked" class="TextAlignL" label-width="1px">
+                    <el-checkbox v-model="formYbys_sybg.checked">无必要文件</el-checkbox>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" class="TextAlignR">
@@ -426,7 +454,7 @@
             </el-form>
             <el-form :model="formYbys_gssybg" :rules="rulesFile" ref="formYbys_gssybg" label-width="120px" label-position="left">
               <el-row>
-                <el-col :span="12">
+                <el-col :span="9">
                   <el-form-item label="灌水试验报告" prop="fileName" class="TextAlignL">
                     <el-row>
                       <el-upload
@@ -447,10 +475,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="9">
-                  <el-form-item label="完成比列" prop="percent" class="TextAlignL">
+                  <el-form-item label="完成比列" prop="percent" class="TextAlignL" label-width="80px">
                     <el-input v-model="formYbys_gssybg.percent" style="width: 150px;">
                       <el-button slot="append">%</el-button>
                     </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="" prop="checked" class="TextAlignL" label-width="1px">
+                    <el-checkbox v-model="formYbys_gssybg.checked">无必要文件</el-checkbox>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" class="TextAlignR">
@@ -463,7 +496,7 @@
           <section v-if="processName == '安装调试'">
             <el-form :model="formAzts_tsysd" :rules="rulesFile" ref="formAzts_tsysd" label-width="120px" label-position="left">
               <el-row>
-                <el-col :span="12">
+                <el-col :span="9">
                   <el-form-item label="调试验收单" prop="fileName" class="TextAlignL">
                     <el-row>
                       <el-upload
@@ -484,10 +517,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="9">
-                  <el-form-item label="完成比列" prop="percent" class="TextAlignL">
+                  <el-form-item label="完成比列" prop="percent" class="TextAlignL" label-width="80px">
                     <el-input v-model="formAzts_tsysd.percent" style="width: 150px;">
                       <el-button slot="append">%</el-button>
                     </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="" prop="checked" class="TextAlignL" label-width="1px">
+                    <el-checkbox v-model="formAzts_tsysd.checked">无必要文件</el-checkbox>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" class="TextAlignR">
@@ -497,7 +535,7 @@
             </el-form>
             <el-form :model="formAzts_sbyjd" :rules="rulesFile" ref="formAzts_sbyjd" label-width="120px" label-position="left">
               <el-row>
-                <el-col :span="12">
+                <el-col :span="9">
                   <el-form-item label="设备移交单" prop="fileName" class="TextAlignL">
                     <el-row>
                       <el-upload
@@ -518,10 +556,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="9">
-                  <el-form-item label="完成比列" prop="percent" class="TextAlignL">
+                  <el-form-item label="完成比列" prop="percent" class="TextAlignL" label-width="80px">
                     <el-input v-model="formAzts_sbyjd.percent" style="width: 150px;">
                       <el-button slot="append">%</el-button>
                     </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="" prop="checked" class="TextAlignL" label-width="1px">
+                    <el-checkbox v-model="formAzts_sbyjd.checked">无必要文件</el-checkbox>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3" class="TextAlignR">
@@ -554,7 +597,12 @@
                       </el-row>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12" class="TextAlignR">
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formJgys.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
                     <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formJgys', '竣工图')">提 交</el-button>
                   </el-col>
               </el-row>
@@ -584,7 +632,12 @@
                       </el-row>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12" class="TextAlignR">
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formSjjs.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
                     <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formSjjs', '审计报告')">提 交</el-button>
                   </el-col>
               </el-row>
@@ -614,7 +667,12 @@
                       </el-row>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12" class="TextAlignR">
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formXmyj.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
                     <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formXmyj', '同竣工验收资料')">提 交</el-button>
                   </el-col>
               </el-row>
@@ -644,7 +702,12 @@
                       </el-row>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12" class="TextAlignR">
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formZbks.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
                     <el-button type="primary" @click="uploadFile('formZbks', '调试验收单')">提 交</el-button>
                   </el-col>
               </el-row>
@@ -674,7 +737,12 @@
                       </el-row>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="12" class="TextAlignR">
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formZbjs.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
                     <el-button type="primary" @click="uploadFile('formZbjs', '文件')">提 交</el-button>
                   </el-col>
               </el-row>
@@ -737,63 +805,78 @@ export default {
       fileUrl: '',
       formHtqd: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formJcsg_kgbg: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formJcsg_gcjdhy: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formJcsg_xmlzd: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formSbdxc: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formYbys_sqbg: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formYbys_sybg: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formYbys_gssybg: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formAzts_tsysd: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formAzts_sbyjd: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formJgys: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formSjjs: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formXmyj: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formZbks: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formZbjs: {
         fileName: '',
-        percent: ''
+        percent: '',
+        checked: false
       },
       formAppend: {
         fileName: '',
@@ -844,7 +927,8 @@ export default {
   computed: {
     uploadAdr () {
       // return 'http://plant.fs-elliott.cn:8082/fushengJK/uploadFileZT?mulu=' + `${this.contractNo}`
-      return 'http://192.168.1.13:8081/fushengJK/uploadFileZT?mulu=' + `${this.contractNo}`
+      // return 'http://192.168.1.13:8081/fushengJK/uploadFileZT?mulu=' + `${this.contractNo}`
+      return 'http://zicpp.zicp.vip:59215/fushengJK/uploadFileZT?mulu=' + `${this.contractNo}`
     }
   },
   watch: {
@@ -1001,7 +1085,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>select fcontractno 合同号,ftype 阶段,fstage,'http://192.168.1.13:8081/zetian_file/'+fcontractno+'/'+fpath 文件路径,convert(varchar(50),fdate,23)fdate,isnull(fper,0)fper from Z_FILE where fcontractno='" + this.contractNo + "' and ftype='" + this.processName + "'</FSQL>"
+      tmpData += "<FSQL>select fcontractno 合同号,ftype 阶段,fstage,'http://zicpp.zicp.vip:59215/zetian_file/'+fcontractno+'/'+fpath 文件路径,convert(varchar(50),fdate,23)fdate,isnull(fper,0)fper from Z_FILE where fcontractno='" + this.contractNo + "' and ftype='" + this.processName + "'</FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -1168,7 +1252,7 @@ export default {
           this.surefinish()
           break
         case '合同签订':
-          if (this.fileList['合同签订']['销售合同'].length === 0) {
+          if (this.fileList['合同签订']['销售合同'].length === 0 && !this.formHtqd.checked) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'
@@ -1178,7 +1262,7 @@ export default {
           }
           break
         case '进场施工':
-          if (this.fileList['进场施工']['开工报告'].length === 0 || this.fileList['进场施工']['工程交底会议'].length === 0 || this.fileList['进场施工']['项目流转单'].length === 0) {
+          if ((this.fileList['进场施工']['开工报告'].length === 0 && !this.formJcsg_kgbg.checked) || (this.fileList['进场施工']['工程交底会议'].length === 0 && !this.formJcsg_gcjdhy.checked) || (this.fileList['进场施工']['项目流转单'].length === 0 && !this.formJcsg_xmlzd.checked)) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'
@@ -1188,7 +1272,7 @@ export default {
           }
           break
         case '设备到现场':
-          if (this.fileList['设备到现场']['设备签收单'].length === 0) {
+          if (this.fileList['设备到现场']['设备签收单'].length === 0 && !this.formSbdxc.checked) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'
@@ -1198,7 +1282,7 @@ export default {
           }
           break
         case '隐蔽验收':
-          if (this.fileList['隐蔽验收']['试气报告'].length === 0 || this.fileList['隐蔽验收']['试压报告'].length === 0 || this.fileList['隐蔽验收']['灌水试验报告'].length === 0) {
+          if ((this.fileList['隐蔽验收']['试气报告'].length === 0 && !this.formYbys_sqbg.checked) || (this.fileList['隐蔽验收']['试压报告'].length === 0 && !this.formYbys_sybg.checked) || (this.fileList['隐蔽验收']['灌水试验报告'].length === 0 && !this.formYbys_gssybg.checked)) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'
@@ -1208,7 +1292,7 @@ export default {
           }
           break
         case '安装调试':
-          if (this.fileList['安装调试']['调试验收单'].length === 0 || this.fileList['安装调试']['设备移交单'].length === 0) {
+          if ((this.fileList['安装调试']['调试验收单'].length === 0 && !this.formAzts_tsysd.checked) || (this.fileList['安装调试']['设备移交单'].length === 0 && !this.formAzts_sbyjd.checked)) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'
@@ -1218,7 +1302,7 @@ export default {
           }
           break
         case '竣工验收':
-          if (this.fileList['竣工验收']['竣工图'].length === 0) {
+          if (this.fileList['竣工验收']['竣工图'].length === 0 && !this.formJgys.checked) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'
@@ -1228,18 +1312,18 @@ export default {
           }
           break
         case '审价结算':
-          this.saveSjPrice()
-          // if (this.fileList['审价结算']['审计报告'].length === 0) {
-          //   this.$message({
-          //     message: '文件尚未上传完整，目前不能确认完成!',
-          //     type: 'warning'
-          //   })
-          // } else {
-          //   this.saveSjPrice()
-          // }
+          // this.saveSjPrice()
+          if (this.fileList['审价结算']['审计报告'].length === 0 && !this.formSjjs.checked) {
+            this.$message({
+              message: '文件尚未上传完整，目前不能确认完成!',
+              type: 'warning'
+            })
+          } else {
+            this.saveSjPrice()
+          }
           break
         case '项目移交':
-          if (this.fileList['项目移交']['同竣工验收资料'].length === 0) {
+          if (this.fileList['项目移交']['同竣工验收资料'].length === 0 && !this.formXmyj.checked) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'
@@ -1249,7 +1333,7 @@ export default {
           }
           break
         case '质保开始':
-          if (this.fileList['质保开始']['调试验收单'].length === 0) {
+          if (this.fileList['质保开始']['调试验收单'].length === 0 && !this.formZbks.checked) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'
@@ -1259,7 +1343,7 @@ export default {
           }
           break
         case '质保结束':
-          if (this.fileList['质保结束']['文件'].length === 0) {
+          if (this.fileList['质保结束']['文件'].length === 0 && !this.formZbjs.checked) {
             this.$message({
               message: '文件尚未上传完整，目前不能确认完成!',
               type: 'warning'

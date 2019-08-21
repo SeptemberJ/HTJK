@@ -231,6 +231,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { Loading } from 'element-ui'
 import $ from 'jquery'
 import ProcessEdit from '../components/ProcessEdit'
 export default {
@@ -360,11 +361,16 @@ export default {
       }
     },
     async getInfor () {
+      let loadingInstance = Loading.service({
+        lock: true,
+        text: '加载中',
+        spinner: 'el-icon-loading'
+      })
       let ReceiptRate = await this.getReceiptRate()
       let Author = await this.getAuthor()
-      this.getBasicInfor(ReceiptRate, Author)
+      this.getBasicInfor(ReceiptRate, Author, loadingInstance)
     },
-    getBasicInfor (ReceiptRate, Author) {
+    getBasicInfor (ReceiptRate, Author, loadingInstance) {
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
@@ -455,14 +461,17 @@ export default {
           //   item.sj = (item.fyingshou - item.fshiji).toFixed(2)
           //   return item
           // })
+          loadingInstance.close()
         } else {
           this.$message({
             message: '暂无信息!',
             type: 'info'
           })
+          loadingInstance.close()
         }
       }).catch((error) => {
         console.log(error)
+        loadingInstance.close()
       })
     },
     getSwry () {
