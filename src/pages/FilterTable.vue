@@ -513,7 +513,8 @@ export default {
   },
   computed: {
     ...mapState({
-      resultDataOrigin: state => state.resultDataOrigin
+      resultDataOrigin: state => state.resultDataOrigin,
+      userInfo: state => state.userInfo
     }),
     formFilter: {
       get: function () {
@@ -535,11 +536,13 @@ export default {
   methods: {
     ...mapActions([
       'updateContractNo',
+      'updateCurDB',
       'updateResultData',
       'updateFilterCondition'
     ]),
     goDetail (row) {
       this.updateContractNo(row['合同号'])
+      this.updateCurDB(row['账套名'])
       this.$router.push({name: 'InfoDynamicTable'})
     },
     // 部门selectList
@@ -592,7 +595,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>exec [Z_ContractList] '" + this.formFilter.contractNo + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + Number((this.curPage - 1) * this.pageSize + 1) + ',' + this.pageSize * this.curPage + '</FSQL>'
+      tmpData += "<FSQL>exec [Z_ContractList] '" + this.formFilter.contractNo + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + Number((this.curPage - 1) * this.pageSize + 1) + ',' + this.pageSize * this.curPage + ',' + this.userInfo.fempid + '</FSQL>'
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -604,7 +607,7 @@ export default {
         // 提取数据
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
-        console.log('HtmlStr---', JSON.parse(HtmlStr))
+        console.log('HtmlStr1111---', JSON.parse(HtmlStr))
         this.resultData = (JSON.parse(HtmlStr)).map(item => {
           item['开工日期'] = item['开工日期'] ? item['开工日期'].slice(0, 10) : ''
           item['完工日期'] = item['完工日期'] ? item['完工日期'].slice(0, 10) : ''
@@ -630,7 +633,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>exec [Z_ContractList_count] '" + this.formFilter.contractNo + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + '</FSQL>'
+      tmpData += "<FSQL>exec [Z_ContractList_count] '" + this.formFilter.contractNo + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + this.userInfo.fempid + '</FSQL>'
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'

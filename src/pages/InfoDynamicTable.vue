@@ -261,6 +261,7 @@ export default {
   computed: {
     ...mapState({
       curContractNo: state => state.curContractNo,
+      curDB: state => state.curDB,
       userInfo: state => state.userInfo
     })
   },
@@ -283,6 +284,7 @@ export default {
         items: [
           {
             FContractNo: this.curContractNo,
+            FDB: this.curDB,
             f1: this.formBasic.swry,
             f2: this.formBasic.xmjl,
             famount: this.formBasic.qyhtje,
@@ -375,7 +377,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>SELECT * FROM Z_Contract WHERE  合同号='" + this.curContractNo + "'</FSQL>"
+      tmpData += "<FSQL>SELECT * FROM Z_Contract WHERE  合同号='" + this.curContractNo + "' and 账套名='" + this.curDB + "'</FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -443,13 +445,35 @@ export default {
             {status: curTimeStamp > zbTimeStamp ? (Info['收款率'] === '100.00%' ? 2 : 3) : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束']}
             // {status: curTimeStamp > zbTimeStamp && Info['收款率'] === '100.00%' ? 3 : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束']}
           ]
-          for (let i = 0; i < 11; i++) {
-            if (Info[this.liuCheng[i]] === 1) {
-              this.curLuiCheng = this.liuCheng[i] === '放号' ? '--' : this.liuCheng[i]
-              this.curLuiChengIdx = i
-              break
+          // 判断当前流程
+          if (Info['放号'] === 1) {
+            this.curLuiCheng = ''
+            this.curLuiChengIdx = 0
+          } else {
+            for (let i = 0; i < 11; i++) {
+              if (Info[this.liuCheng[i]] === 2 && Info[this.liuCheng[i + 1]] !== 0) {
+                this.curLuiCheng = this.liuCheng[i + 1]
+                this.curLuiChengIdx = Number(i) + 1
+              }
+              // 有禁止操作项时
+              if (Info[this.liuCheng[i]] === 2 && Info[this.liuCheng[i + 1]] === 0) {
+                for (let j = i + 1; j < 11; j++) {
+                  if (Info[this.liuCheng[j]] === 1) {
+                    this.curLuiCheng = this.liuCheng[j]
+                    this.curLuiChengIdx = Number(j)
+                    break
+                  }
+                }
+              }
             }
           }
+          // for (let i = 0; i < 11; i++) {
+          //   if (Info[this.liuCheng[i]] === 1) {
+          //     this.curLuiCheng = this.liuCheng[i] === '放号' ? '--' : this.liuCheng[i]
+          //     this.curLuiChengIdx = i
+          //     break
+          //   }
+          // }
           // 设备到现场的未收金额
           if (ReceiptRate[1]) {
             this.wsjeSB = (ReceiptRate[1].fyingshou - ReceiptRate[1].fshiji).toFixed(2)
@@ -479,7 +503,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL><![CDATA[select f1 商务人员,convert(varchar(50),f1date,23) from Z_Contract_log where isnull(f1,'')<>'' and FContractNo='" + this.curContractNo + "'  order by fid]]></FSQL>"
+      tmpData += "<FSQL><![CDATA[select f1 商务人员,convert(varchar(50),f1date,23) from Z_Contract_log where isnull(f1,'')<>'' and FContractNo='" + this.curContractNo + "' and fdb='" + this.curDB + "'  order by fid]]></FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -504,7 +528,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL><![CDATA[select f2 项目经理,convert(varchar(50),f2date,23) from Z_Contract_log where isnull(f2,'')<>'' and FContractNo='" + this.curContractNo + "' order by fid]]></FSQL>"
+      tmpData += "<FSQL><![CDATA[select f2 项目经理,convert(varchar(50),f2date,23) from Z_Contract_log where isnull(f2,'')<>'' and FContractNo='" + this.curContractNo + "'and fdb='" + this.curDB + "' order by fid]]></FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'

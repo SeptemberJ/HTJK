@@ -143,12 +143,24 @@
     <section class="MarginT_20">
       <el-button icon="el-icon-plus" @click="addLine">新增一行</el-button>
     </section>
+    <!-- 导入Excel -->
+    <!-- <el-upload
+      class="upload-demo"
+      ref="upload"
+      action="https://jsonplaceholder.typicode.com/posts/"
+      :on-change="changeFile"
+      :multiple="false"
+      :auto-upload="false"
+      :show-file-list="false">
+      <el-button size="small" type="primary">点击上传</el-button>
+    </el-upload> -->
   </div>
 </template>
 
 <script>
 // import { mapState, mapActions } from 'vuex'
 // import $ from 'jquery'
+import XLSX from 'xlsx'
 export default {
   name: 'Contract',
   data () {
@@ -240,6 +252,45 @@ export default {
     },
     changePCode (val) {
       console.log(val)
+    },
+    changeFile (file, fileList) {
+      let files = {0: file.raw}
+      this.readExcel1(files)
+    },
+    readExcel1 (files) { // 表格导入
+      // var that = this
+      console.log(files)
+      if (files.length <= 0) { // 如果没有文件名
+        return false
+      } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
+        this.$Message.error('上传格式不正确，请上传xls或者xlsx格式')
+        return false
+      }
+      const fileReader = new FileReader()
+      fileReader.onload = (ev) => {
+        try {
+          const data = ev.target.result
+          const workbook = XLSX.read(data, {
+            type: 'binary'
+          })
+          const wsname = workbook.SheetNames[0] // 取第一张表
+          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]) // 生成json表格内容
+          console.log(ws)
+          // that.peopleArr = [] // 清空接收数据
+          // if(that.peopleArr.length == 1 && that.peopleArr[0].roleName == '' && that.peopleArr[0].enLine == ''){
+          //   that.peopleArr = []
+          // }
+          // 重写数据
+          try {
+          } catch (err) {
+            console.log(err)
+          }
+          this.$refs.upload.value = ''
+        } catch (e) {
+          return false
+        }
+      }
+      fileReader.readAsBinaryString(files[0])
     }
   }
 }

@@ -794,7 +794,7 @@
 </template>
 
 <script>
-// import func from '../../vue-temp/vue-editor-bridge';
+import { mapState } from 'vuex'
 import $ from 'jquery'
 export default {
   name: 'ProcessEdit',
@@ -925,6 +925,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      curDB: state => state.curDB
+    }),
     uploadAdr () {
       // return 'http://plant.fs-elliott.cn:8082/fushengJK/uploadFileZT?mulu=' + `${this.contractNo}`
       // return 'http://192.168.1.13:8081/fushengJK/uploadFileZT?mulu=' + `${this.contractNo}`
@@ -978,6 +981,7 @@ export default {
       tmpData += '<FType>' + this.processName + '</FType>'
       tmpData += '<FPath>' + file.fileName + '</FPath>'
       tmpData += '<FStage>' + stage + '</FStage>'
+      tmpData += '<FDB>' + this.curDB + '</FDB>'
       tmpData += '</PIC_UPLoad_DEL>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -1032,6 +1036,7 @@ export default {
       tmpData += '<FPath>' + filename + '</FPath>'
       tmpData += '<FPercent>' + Percent + '</FPercent>'
       tmpData += '<FStage>' + stage + '</FStage>'
+      tmpData += '<FDB>' + this.curDB + '</FDB>'
       tmpData += '</PIC_UPLoad>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -1085,7 +1090,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>select fcontractno 合同号,ftype 阶段,fstage,'http://zicpp.zicp.vip:59215/zetian_file/'+fcontractno+'/'+fpath 文件路径,convert(varchar(50),fdate,23)fdate,isnull(fper,0)fper from Z_FILE where fcontractno='" + this.contractNo + "' and ftype='" + this.processName + "'</FSQL>"
+      tmpData += "<FSQL>select fcontractno 合同号,ftype 阶段,fstage,'http://zicpp.zicp.vip:59215/zetian_file/'+fcontractno+'/'+fpath 文件路径,convert(varchar(50),fdate,23)fdate,isnull(fper,0)fper from Z_FILE where fcontractno='" + this.contractNo + "' and ftype='" + this.processName + "' and fdb='" + this.curDB + "'</FSQL>"
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -1132,6 +1137,7 @@ export default {
         tmpData += '<Jungong_Date xmlns="http://tempuri.org/">'
         tmpData += '<FContractNo>' + this.contractNo + '</FContractNo>'
         tmpData += '<FDate>' + this.formAppend.jgDate + '</FDate>'
+        tmpData += '<FDB>' + this.curDB + '</FDB>'
         tmpData += '</Jungong_Date>'
         tmpData += '</soap:Body>'
         tmpData += '</soap:Envelope>'
@@ -1176,6 +1182,7 @@ export default {
         tmpData += '<ShenJi_Amount xmlns="http://tempuri.org/">'
         tmpData += '<FContractNo>' + this.contractNo + '</FContractNo>'
         tmpData += '<FAmount>' + this.formAppend.sjPrice + '</FAmount>'
+        tmpData += '<FDB>' + this.curDB + '</FDB>'
         tmpData += '</ShenJi_Amount>'
         tmpData += '</soap:Body>'
         tmpData += '</soap:Envelope>'
@@ -1218,6 +1225,7 @@ export default {
         tmpData += '<ZhibaoStart_Date xmlns="http://tempuri.org/">'
         tmpData += '<FContractNo>' + this.contractNo + '</FContractNo>'
         tmpData += '<FDate>' + this.formAppend.zbksDate + '</FDate>'
+        tmpData += '<FDB>' + this.curDB + '</FDB>'
         tmpData += '</ZhibaoStart_Date>'
         tmpData += '</soap:Body>'
         tmpData += '</soap:Envelope>'
@@ -1362,6 +1370,7 @@ export default {
       tmpData += '<FContractNo>' + this.contractNo + '</FContractNo>'
       tmpData += '<FType>' + this.processName + '</FType>'
       tmpData += '<FColor>' + 2 + '</FColor>'
+      tmpData += '<FDB>' + this.curDB + '</FDB>'
       tmpData += '</jindu>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -1399,6 +1408,7 @@ export default {
       tmpData += '<jindu xmlns="http://tempuri.org/">'
       tmpData += '<FContractNo>' + this.contractNo + '</FContractNo>'
       tmpData += '<FType>' + this.processName + '</FType>'
+      tmpData += '<FDB>' + this.curDB + '</FDB>'
       tmpData += '<FColor>10</FColor>'
       // tmpData += '<FColor>' + (this.curLuiChengIdx > this.curEditIdx ? 3 : 1) + '</FColor>'
       tmpData += '</jindu>'
@@ -1413,6 +1423,7 @@ export default {
         let Result = xmlDoc.getElementsByTagName('jinduResponse')[0].getElementsByTagName('jinduResult')[0]
         let HtmlStr = $(Result).html()
         let Info = (JSON.parse(HtmlStr))[0]
+        console.log('backFInish', Info)
         if (Info.code === '1') {
           this.$message({
             message: '反确认成功!',

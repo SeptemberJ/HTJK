@@ -15,6 +15,7 @@ const state = {
   userInfo: null,
   pathName: null,
   curContractNo: '',
+  curDB: null,
   resultDataOrigin: [],
   formFilter: {
     signDepartment: '全部',
@@ -45,6 +46,9 @@ const actions = {
   updateContractNo ({commit, state}, ContractNo) {
     commit('setCurContractNo', ContractNo)
   },
+  updateCurDB ({commit, state}, CurDB) {
+    commit('setCurDB', CurDB)
+  },
   updateResultData ({commit, state}, Data) {
     commit('setResultData', Data)
   },
@@ -62,6 +66,9 @@ const actions = {
 const mutations = {
   setCurContractNo (state, ContractNo) {
     state.curContractNo = ContractNo
+  },
+  setCurDB (state, curDB) {
+    state.curDB = curDB
   },
   setResultData (state, Data) {
     state.resultDataOrigin = Data
