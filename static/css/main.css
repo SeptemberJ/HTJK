@@ -77,7 +77,7 @@ span .el-input.is-disabled .el-input__inner {
 .sortBlock .el-menu-item.is-active{
   /* background: #ecf5ff; */
 }
-#resultTable thead .el-table td, .el-table th.is-leaf {
+#resultTable thead .el-table td, #resultTable thead th{
   background: #7bbfea;
 }
 #resultTable thead th>.cell{

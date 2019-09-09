@@ -15,6 +15,7 @@ const state = {
   userInfo: null,
   pathName: null,
   curContractNo: '',
+  cuXMMC: '',
   curDB: null,
   resultDataOrigin: [],
   formFilter: {
@@ -36,7 +37,8 @@ const state = {
     subItems: -1,
     sort: '',
     // vagueSearch: ''
-    contractNo: '', // XSHT002089
+    // contractNo: '', // XSHT002089
+    xmmc: '',
     customer: '',
     projectNumber: ''
   }
@@ -45,6 +47,9 @@ const state = {
 const actions = {
   updateContractNo ({commit, state}, ContractNo) {
     commit('setCurContractNo', ContractNo)
+  },
+  updateXMMC ({commit, state}, XMMC) {
+    commit('setXMMC', XMMC)
   },
   updateCurDB ({commit, state}, CurDB) {
     commit('setCurDB', CurDB)
@@ -66,6 +71,9 @@ const actions = {
 const mutations = {
   setCurContractNo (state, ContractNo) {
     state.curContractNo = ContractNo
+  },
+  setXMMC (state, XMMC) {
+    state.cuXMMC = XMMC
   },
   setCurDB (state, curDB) {
     state.curDB = curDB

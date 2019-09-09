@@ -4,6 +4,8 @@ import InfoDynamicTable from '@/pages/InfoDynamicTable'
 import FilterTable from '@/pages/FilterTable'
 import Contract from '@/pages/Contract'
 import Login from '@/pages/Login'
+import Outlay from '@/pages/Outlay'
+import Cost from '@/pages/Cost'
 import store from '../vuex/store'
 import {getCookie} from '@/util/utils'
 
@@ -27,6 +29,18 @@ const router = new VueRouter({
       path: '/FilterTable',
       name: 'FilterTable',
       component: FilterTable,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/Cost',
+      name: 'Cost',
+      component: Cost,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/Outlay',
+      name: 'Outlay',
+      component: Outlay,
       meta: {requireAuth: true}
     },
     {

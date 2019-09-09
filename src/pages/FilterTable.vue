@@ -1,13 +1,13 @@
 <template>
   <div class="FilterTable">
     <el-row>
-      <el-col :span="11" id="FilterBlock" class="FilterBlock">
+      <el-col :span="9" id="FilterBlock" class="FilterBlock">
         <section>
           <el-row>
             <el-col :span="24" class="MarginB_20">
               <el-button type="primary" size="small" icon="el-icon-search" style="width:100%;" @click="changeFilter">搜 索</el-button>
             </el-col>
-            <el-form ref="formFilter" :model="formFilter" label-width="70px" label-position="left" size="mini">
+            <el-form ref="formFilter" :model="formFilter" label-width="90px" label-position="left" size="mini">
               <el-col :span="12">
                 <el-form-item label="签约部门">
                   <!--  @change="changeFilter"  -->
@@ -35,9 +35,9 @@
               </el-col>
               <el-col :span="24">
                 <el-form-item label="合同金额">
-                  <el-input-number v-model="formFilter.contractSumS" :controls="false" placeholder="起始金额"></el-input-number>
+                  <el-input-number style="width: 100px" v-model="formFilter.contractSumS" :controls="false" placeholder="起始金额"></el-input-number>
                     <span style="width: 80px;text-align:center;display:inline-block;">——</span>
-                  <el-input-number v-model="formFilter.contractSumE" :controls="false" placeholder="截止金额"></el-input-number>
+                  <el-input-number style="width: 100px" v-model="formFilter.contractSumE" :controls="false" placeholder="截止金额"></el-input-number>
                   <!-- <el-select v-model="formFilter.contractPrice" placeholder="请选择">
                     <el-option
                       v-for="item in contractPriceList"
@@ -98,7 +98,7 @@
               </el-col> -->
               <el-col :span="24">
                 <el-row>
-                  <el-col :span="15" class="TextAlignL">
+                  <el-col :span="14" class="TextAlignL">
                     <el-form-item label="报警与提示" label-width="90px">
                       <el-select class="WidthFull" v-model="formFilter.warnTip" placeholder="请选择">
                         <el-option
@@ -196,7 +196,7 @@
                       </el-select>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8" :offset="1">
+                  <el-col :span="9" :offset="1">
                     <section>
                       <p style="text-align: left;margin-bottom: 5px;">排序</p>
                       <div class="sortBlock">
@@ -210,10 +210,10 @@
                       </div>
                     </section>
                     <section>
-                      <p class="MarginT_10" style="text-align: left;padding-bottom: 5px;">合同号</p>
+                      <p class="MarginT_10" style="text-align: left;padding-bottom: 5px;">项目名称</p>
                       <div class="vagueSearchBlock">
                         <!-- @blur="changeFilter" @keyup.enter.native='enterEvent' -->
-                        <el-input v-model="formFilter.contractNo" clearable size="mini"></el-input>
+                        <el-input v-model="formFilter.xmmc" clearable size="mini"></el-input>
                       </div>
                     </section>
                     <section>
@@ -236,7 +236,7 @@
         </section>
       </el-col>
       <!-- :height="tableHieght" BgGray -->
-      <el-col :span="13" id="ResultBlock" class="ResultBloc">
+      <el-col :span="15" id="ResultBlock" class="ResultBloc">
         <el-table id="resultTable"
           v-loading="loading"
           :data="resultData"
@@ -264,6 +264,18 @@
           <el-table-column
             prop="项目名称"
             label="项目名称"
+            width="200"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="隶属公司"
+            label="隶属公司"
+            width="200"
+            show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column
+            prop="账套名"
+            label="数据提取公司"
             width="200"
             show-overflow-tooltip>
           </el-table-column>
@@ -536,12 +548,14 @@ export default {
   methods: {
     ...mapActions([
       'updateContractNo',
+      'updateXMMC',
       'updateCurDB',
       'updateResultData',
       'updateFilterCondition'
     ]),
     goDetail (row) {
       this.updateContractNo(row['合同号'])
+      this.updateXMMC(row['项目名称'])
       this.updateCurDB(row['账套名'])
       this.$router.push({name: 'InfoDynamicTable'})
     },
@@ -595,7 +609,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>exec [Z_ContractList] '" + this.formFilter.contractNo + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + Number((this.curPage - 1) * this.pageSize + 1) + ',' + this.pageSize * this.curPage + ',' + this.userInfo.fempid + '</FSQL>'
+      tmpData += "<FSQL>exec [Z_ContractList] '" + this.formFilter.xmmc + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + Number((this.curPage - 1) * this.pageSize + 1) + ',' + this.pageSize * this.curPage + ',' + this.userInfo.fempid + '</FSQL>'
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -607,7 +621,7 @@ export default {
         // 提取数据
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
-        console.log('HtmlStr1111---', JSON.parse(HtmlStr))
+        console.log('filterInfo---', JSON.parse(HtmlStr))
         this.resultData = (JSON.parse(HtmlStr)).map(item => {
           item['开工日期'] = item['开工日期'] ? item['开工日期'].slice(0, 10) : ''
           item['完工日期'] = item['完工日期'] ? item['完工日期'].slice(0, 10) : ''
@@ -633,7 +647,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>exec [Z_ContractList_count] '" + this.formFilter.contractNo + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + this.userInfo.fempid + '</FSQL>'
+      tmpData += "<FSQL>exec [Z_ContractList_count] '" + this.formFilter.xmmc + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + this.userInfo.fempid + '</FSQL>'
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'

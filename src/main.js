@@ -9,6 +9,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Http from './util/request'
 import '../static/css/main.css'
+// import '../static/js/xlsx.full.min.js'
 
 Vue.config.productionTip = false
 Vue.prototype.Http = Http

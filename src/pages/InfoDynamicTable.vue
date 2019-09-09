@@ -4,47 +4,36 @@
       <!-- 基本信息 -->
       <el-col :span="24">
         <div class="ModuleTit TextAlignL">项目信息 <el-button type="info" size="small" icon="el-icon-close" @click="back"></el-button></div>
-        <el-form ref="formBasic" :model="formBasic" label-width="100px" size="small" class="DisabledNormal MarginT_20"  style="padding-right: 20px;">
+        <el-form ref="formBasic" :model="formBasic" label-width="85px" size="small" class="DisabledNormal MarginT_20"  style="padding-right: 20px;">
           <el-row>
-            <el-col :span="8">
-              <el-form-item label="合同编号">
-                <el-input v-model="formBasic.contractNo" disabled></el-input>
+            <el-col :span="6">
+              <el-form-item label="隶属公司">
+                <el-input v-model="formBasic.subsidiary" disabled></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
+            <el-col :span="6">
+              <el-form-item label="客户名称">
+                <el-input v-model="formBasic.customerName" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="项目名称">
                 <el-input v-model="formBasic.projectName" disabled></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-form-item label="签约日期">
                 <el-input v-model="formBasic.qyrq" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
-            <el-col :span="8">
+            <el-col :span="6">
               <el-form-item label="签约部门">
                 <el-input v-model="formBasic.signDepartment" disabled></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
-              <el-form-item label="客户名称">
-                <el-input v-model="formBasic.customerName" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="签约合同金额">
-                <el-input v-model="formBasic.qyhtje"></el-input>
-              </el-form-item>
-            </el-col>
-            <!-- <el-col :span="8">
-              <el-form-item label="是否先签约">
-                <el-input v-model="formBasic.isSigned" disabled></el-input>
-              </el-form-item>
-            </el-col> -->
-          </el-row>
-          <el-row>
             <el-col :span="6" class="TextAlignL">
               <el-form-item label="商务人员">
                 <el-input v-model="formBasic.swry" clearable style="width:70%;"></el-input>
@@ -74,18 +63,6 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="合同金额">
-                <el-input v-model="formBasic.htje" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="结算价">
-                <el-input v-model="formBasic.jsj" disabled></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
               <el-form-item label="开工日期">
                 <el-date-picker style="width: 100%;"
                   v-model="formBasic.kgrq"
@@ -95,6 +72,98 @@
                 </el-date-picker>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="5">
+              <el-form-item label="签约合同金额" label-width="100px">
+                <el-input v-model="formBasic.qyhtje"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="合同金额">
+                <el-input v-model="formBasic.htje" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="结算价">
+                <el-input v-model="formBasic.jsj" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="审计价">
+                <el-input v-model="formBasic.sjj" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="竣工日期">
+                <el-input v-model="formBasic.jgrq" disabled></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="5">
+              <el-form-item label="预算毛利率" label-width="100px">
+                <el-input v-model="formBasic.ysmll" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="毛利率">
+                <el-input v-model="formBasic.mll" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="出货率">
+                <el-input v-model="formBasic.chl" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="收款率">
+                <el-input v-model="formBasic.skl" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="质保起">
+                <el-input v-model="formBasic.zbks" disabled></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="4">
+              <el-form-item label="累计开票">
+                <el-input v-model="formBasic.ljkp" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="累计收款">
+                <el-input v-model="formBasic.ljsk" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="费用合计">
+                <el-input v-model="formBasic.fyhj" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="成本合计">
+                <el-input v-model="formBasic.cbhj" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="质保期">
+                <el-input v-model="formBasic.zbq" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="质保至">
+                <el-input v-model="formBasic.zbjs" disabled></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <!-- <el-row>
             <el-col :span="6">
               <el-form-item label="完工日期">
                 <el-date-picker style="width: 100%;"
@@ -105,61 +174,8 @@
                 </el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item label="审计价">
-                <el-input v-model="formBasic.sjj" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="预算毛利率">
-                <el-input v-model="formBasic.ysmll" disabled></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <el-form-item label="累计开票">
-                <el-input v-model="formBasic.ljkp" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="累计收款">
-                <el-input v-model="formBasic.ljsk" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="出货率">
-                <el-input v-model="formBasic.chl" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="收款率">
-                <el-input v-model="formBasic.skl" disabled></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <el-form-item label="竣工日期">
-                <el-input v-model="formBasic.jgrq" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="质保期">
-                <el-input v-model="formBasic.zbq" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="质保起">
-                <el-input v-model="formBasic.zbks" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="质保至">
-                <el-input v-model="formBasic.zbjs" disabled></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          </el-row> -->
+
           <el-button class="MarginB_20" type="danger" size="small" @click="save">保 存</el-button>
         </el-form>
       </el-col>
@@ -173,6 +189,7 @@
             <el-col :span="4">应收金额</el-col>
             <el-col :span="4">实际金额</el-col>
             <el-col :span="4">未收金额</el-col>
+            <el-col :span="4">收款时间</el-col>
           </el-row>
           <div v-for="(item, idx) in receiptRateInfo" :key="idx" class="text item MarginB_10">
             <el-row>
@@ -181,6 +198,7 @@
               <el-col :span="4">{{item.fyingshou}}</el-col>
               <el-col :span="4">{{item.fshiji}}</el-col>
               <el-col :span="4">{{(item.fyingshou - item.fshiji).toFixed(2)}}</el-col>
+              <el-col :span="4"></el-col>
             </el-row>
             <!-- <span>{{idx + 1}}. {{item.FName}}</span>
             <span style="margin-left: 100px;">{{item.fpercent}}</span> -->
@@ -206,14 +224,14 @@
     <el-col :span="24" class="TextAlignL"><span class="ModuleTit">工程项目总进度</span></el-col>
     <el-col :span="24" class="StepWrap TextAlignL" style="width: 100%;overflow-x: scroll;">
       <div :class="{SetpItem: true, 'NotAllowed': item.status == 0}" v-for="(item, idx) in steps" :key="idx" @click="changeStep(idx)">
-        <div :class="{'LineItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3}" v-show="idx > 0"></div>
+        <div :class="{'LineItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3 || item.status == 1 && idx < curLuiChengIdx}" v-show="idx > 0"></div>
         <div class="DotItemwrap">
           <div class="TextItem">
             <p>{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' || item.tit == '质保结束' ? formBasic.swry : formBasic.xmjl}}</p>
             <p v-if="item.tit == '设备到现场'">{{wsjeSB > 0 ? wsjeSB : ''}}</p>
             <p v-if="item.status == 3 && item.tit == '质保结束'">{{formBasic.wsje > 0 ? formBasic.wsje : ''}}</p>
           </div>
-          <div :class="{'DotItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3}"></div>
+          <div :class="{'DotItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3 || item.status == 1 && idx < curLuiChengIdx}"></div>
           <div class="TextItem">
             <p>{{item.tit}}</p>
           </div>
@@ -223,6 +241,8 @@
     <!-- 返回 -->
     <el-col :span="24" class="MarginT_20 MarginB_20">
       <el-button type="info" size="small" icon="el-icon-arrow-left" @click="back">返 回</el-button>
+      <el-button type="primary" size="small" @click="toCost">成 本</el-button>
+      <el-button type="warning" size="small" @click="toOutlay">费 用</el-button>
     </el-col>
     <!-- ProcessEdit -->
     <ProcessEdit v-if="ifEdit" :curTimeStamp="curTimeStamp" :processStatus="processStatus" :processName="processName" :curEditIdx="curEditIdx" :curLuiChengIdx="curLuiChengIdx" :contractNo="formBasic.contractNo" @markRed="markRed" @refresh="getInfor" @toggleProcessDialog="toggleProcessDialog"/>
@@ -397,6 +417,7 @@ export default {
           let zbTimeStamp = Info['质保至'] ? (new Date(Info['质保至'])).getTime() : curTimeStamp
           let hasShouKuang = true
           this.formBasic = {
+            subsidiary: Info['隶属公司'],
             contractNo: Info['合同号'],
             projectName: Info['项目名称'],
             signDepartment: Info['部门'],
@@ -407,6 +428,7 @@ export default {
             htje: Info['合同金额'],
             qyhtje: Info['签约合同金额'],
             ysmll: '',
+            mll: '',
             xmjl: Info['项目经理'],
             kgrq: Info['开工日期'] ? Info['开工日期'].slice(0, 10) : '',
             wgrq: Info['完工日期'] ? Info['完工日期'].slice(0, 10) : '',
@@ -417,6 +439,8 @@ export default {
             chl: Info['出货率'],
             skl: Info['收款率'],
             jgrq: Info['竣工日期'],
+            fyhj: Info['费用合计'],
+            cbhj: Info['成本合计'],
             zbq: Info['质保期'],
             zbks: Info['质保起'],
             zbjs: Info['质保至'],
@@ -459,8 +483,8 @@ export default {
               if (Info[this.liuCheng[i]] === 2 && Info[this.liuCheng[i + 1]] === 0) {
                 for (let j = i + 1; j < 11; j++) {
                   if (Info[this.liuCheng[j]] === 1) {
-                    this.curLuiCheng = this.liuCheng[j]
-                    this.curLuiChengIdx = Number(j)
+                    this.curLuiCheng = this.liuCheng[j] ? this.liuCheng[j] : ''
+                    this.curLuiChengIdx = Number(j) ? Number(j) : 100
                     break
                   }
                 }
@@ -553,7 +577,7 @@ export default {
         tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
         tmpData += '<soap:Body> '
         tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-        tmpData += "<FSQL>exec z_skbl '" + this.curContractNo + "'</FSQL>"
+        tmpData += "<FSQL>exec z_skbl '" + this.curContractNo + "','" + this.curDB + "'</FSQL>"
         tmpData += '</JA_LIST>'
         tmpData += '</soap:Body>'
         tmpData += '</soap:Envelope>'
@@ -643,6 +667,12 @@ export default {
           this.getInfor()
         }
       })
+    },
+    toOutlay () {
+      this.$router.push({name: 'Outlay'})
+    },
+    toCost () {
+      this.$router.push({name: 'Cost'})
     }
   }
 }

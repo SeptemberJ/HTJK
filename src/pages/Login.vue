@@ -40,8 +40,8 @@ export default {
       btLoading: false,
       realCode: '', // 随机验证码
       Form: {
-        accountName: 'test', // 高健
-        accountPsd: '123' // 1
+        accountName: '', // 高健 test
+        accountPsd: '' // 1 123
       },
       rules: {
         accountName: [
