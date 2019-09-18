@@ -19,26 +19,32 @@ const state = {
   curDB: null,
   resultDataOrigin: [],
   formFilter: {
+    affiliatedCompany: '',
     signDepartment: '全部',
     contractSumS: '',
     contractSumE: '',
+    industryType: '',
+    projectType: '',
+    warnTip: '',
+    subcontractItem: '',
+    receivablesContion: '',
+    completionProject: '',
+    advances: '',
+    inQuality: '',
     contractPrice: -1,
     signYear: CurYear,
-    warnTip: -1,
     signAndFinish: -1,
     fileConditionn: -1,
     classCondition: -1,
-    receivablesContion: -1,
     performBond: -1,
     qualityBond: -1,
     shipmentRate: '',
     receivablesRate: '',
-    inQuality: -1,
     subItems: -1,
     sort: '',
     // vagueSearch: ''
     // contractNo: '', // XSHT002089
-    xmmc: '',
+    xmmc: 'B17070221ZG1804杨浦区311街坊C3地块及北区综合项目二期改造（复旦管院）', // B17070221ZG1804杨浦区311街坊C3地块及北区综合项目二期改造（复旦管院）
     customer: '',
     projectNumber: ''
   }

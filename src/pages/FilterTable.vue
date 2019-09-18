@@ -1,15 +1,28 @@
 <template>
   <div class="FilterTable">
     <el-row>
-      <el-col :span="9" id="FilterBlock" class="FilterBlock">
+      <el-col :span="10" id="FilterBlock" class="FilterBlock">
         <section>
           <el-row>
             <el-col :span="24" class="MarginB_20">
               <el-button type="primary" size="small" icon="el-icon-search" style="width:100%;" @click="changeFilter">搜 索</el-button>
             </el-col>
             <el-form ref="formFilter" :model="formFilter" label-width="90px" label-position="left" size="mini">
-              <el-col :span="12">
-                <el-form-item label="签约部门">
+              <el-col :span="8">
+                <el-form-item label="所属公司" label-width="70px">
+                  <!-- <el-input v-model="formFilter.affiliatedCompany" clearable size="mini"></el-input> -->
+                  <el-select class="WidthFull" v-model="formFilter.affiliatedCompany" placeholder="请选择">
+                    <el-option
+                      v-for="item in CompanyOption"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="签约部门" label-width="70px">
                   <!--  @change="changeFilter"  -->
                   <el-select class="WidthFull" v-model="formFilter.signDepartment" placeholder="请选择">
                     <el-option
@@ -21,8 +34,8 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="11" :offset="1">
-                <el-form-item label="签约年份">
+              <el-col :span="8">
+                <el-form-item label="签约年份" label-width="70px">
                   <el-select class="WidthFull" v-model="formFilter.signYear" placeholder="请选择">
                     <el-option
                       v-for="item in signYearList"
@@ -99,7 +112,97 @@
               <el-col :span="24">
                 <el-row>
                   <el-col :span="14" class="TextAlignL">
-                    <el-form-item label="报警与提示" label-width="90px">
+                    <el-form-item label="行业类型" label-width="90px">
+                      <el-select class="WidthFull" v-model="formFilter.industryType" placeholder="请选择">
+                        <el-option
+                          v-for="item in industryTypeOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="项目类型" label-width="90px">
+                      <el-select class="WidthFull" v-model="formFilter.projectType" placeholder="请选择">
+                        <el-option
+                          v-for="item in projectTypeOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="具有报警项目" label-width="110px">
+                      <el-select class="WidthFull" v-model="formFilter.warnTip" placeholder="请选择">
+                        <el-option
+                          v-for="item in warnTipOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="开具保函" label-width="90px">
+                      <el-select class="WidthFull" v-model="formFilter.makeLetter" placeholder="请选择">
+                        <el-option
+                          v-for="item in makeLetterOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="分包项目" label-width="90px">
+                      <el-select class="WidthFull" v-model="formFilter.subcontractItem" placeholder="请选择">
+                        <el-option
+                          v-for="item in subcontractItemOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="收款情况">
+                      <el-select class="WidthFull" v-model="formFilter.receivablesContion" placeholder="请选择">
+                        <el-option
+                          v-for="item in receivablesContionOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="竣工项目">
+                      <el-select class="WidthFull" v-model="formFilter.completionProject" placeholder="请选择">
+                        <el-option
+                          v-for="item in completionProjectOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="垫资情况">
+                      <el-select class="WidthFull" v-model="formFilter.advances" placeholder="请选择">
+                        <el-option
+                          v-for="item in advancesOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="进入质保期项目" label-width="110px">
+                      <el-select class="WidthFull" v-model="formFilter.inQuality" placeholder="请选择">
+                        <el-option
+                          v-for="item in inQualityOption"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <!-- <el-form-item label="报警与提示" label-width="90px">
                       <el-select class="WidthFull" v-model="formFilter.warnTip" placeholder="请选择">
                         <el-option
                           v-for="item in warnTipList"
@@ -139,16 +242,6 @@
                         </el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="收款情况">
-                      <el-select class="WidthFull" v-model="formFilter.receivablesContion" placeholder="请选择">
-                        <el-option
-                          v-for="item in receivablesContionList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
                     <el-form-item label="履约保证金" label-width="90px">
                       <el-select class="WidthFull" v-model="formFilter.performBond" placeholder="请选择">
                         <el-option
@@ -175,16 +268,6 @@
                     <el-form-item label="收款率(小于输入数的)" label-width="150px">
                       <el-input class="WidthFull" v-model="formFilter.receivablesRate"></el-input>
                     </el-form-item>
-                    <el-form-item label="进入质保期项目" label-width="110px">
-                      <el-select class="WidthFull" v-model="formFilter.inQuality" placeholder="请选择">
-                        <el-option
-                          v-for="item in inQualityList"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
                     <el-form-item label="分包项目情况" label-width="100px">
                       <el-select class="WidthFull" v-model="formFilter.subItems" placeholder="请选择">
                         <el-option
@@ -194,7 +277,7 @@
                           :value="item.value">
                         </el-option>
                       </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                   </el-col>
                   <el-col :span="9" :offset="1">
                     <section>
@@ -217,13 +300,13 @@
                       </div>
                     </section>
                     <section>
-                      <p class="MarginT_10" style="text-align: left;padding-bottom: 5px;">项目编号</p>
+                      <p class="" style="text-align: left;padding-bottom: 5px;">项目编号</p>
                       <div class="vagueSearchBlock">
                         <el-input v-model="formFilter.projectNumber" clearable size="mini"></el-input>
                       </div>
                     </section>
                     <section>
-                      <p class="MarginT_10" style="text-align: left;padding-bottom: 5px;">客户名称</p>
+                      <p class="" style="text-align: left;padding-bottom: 5px;">客户名称</p>
                       <div class="vagueSearchBlock">
                         <el-input v-model="formFilter.customer" clearable size="mini"></el-input>
                       </div>
@@ -236,7 +319,7 @@
         </section>
       </el-col>
       <!-- :height="tableHieght" BgGray -->
-      <el-col :span="15" id="ResultBlock" class="ResultBloc">
+      <el-col :span="14" id="ResultBlock" class="ResultBloc">
         <el-table id="resultTable"
           v-loading="loading"
           :data="resultData"
@@ -274,39 +357,33 @@
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="账套名"
-            label="数据提取公司"
-            width="200"
-            show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
             prop="合同金额"
             label="合同金额"
-            width="100"
+            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             prop="结算价"
             label="结算金额"
-            width="100"
+            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             prop="累计开票"
             label="累计开票"
-            width="100"
+            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             prop="累计收款"
             label="累计收款"
-            width="100"
+            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
             prop="未收金额"
             label="剩余未收"
-            width="100"
+            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
@@ -316,15 +393,15 @@
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="费用金额"
+            prop="费用金额2"
             label="费用金额"
-            width="100"
+            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
-            prop="成本"
+            prop="成本2"
             label="成本"
-            width="100"
+            width="150"
             show-overflow-tooltip>
           </el-table-column>
           <el-table-column
@@ -411,6 +488,12 @@
             width="250"
             show-overflow-tooltip>
           </el-table-column>
+          <el-table-column
+            prop="账套名"
+            label="数据提取公司"
+            width="200"
+            show-overflow-tooltip>
+          </el-table-column>
           <!-- <el-table-column
             prop="结算价"
             label="结算价"
@@ -450,7 +533,59 @@ export default {
       pageSize: 20,
       sum: 0,
       resultData: [],
+      CompanyOption: [
+        {label: '全部', value: '全部'},
+        {label: '泽天机电', value: '泽天机电'},
+        {label: '泽天环科', value: '泽天环科'},
+        {label: '禾长机电', value: '禾长机电'},
+        {label: '泽天实业', value: '泽天实业'},
+        {label: '其他', value: '其他'}
+      ],
       signDepartmentList: [],
+      industryTypeOption: [
+        {label: '房产', value: '房产'},
+        {label: '商业', value: '商业'},
+        {label: '医疗', value: '医疗'},
+        {label: '学校', value: '学校'},
+        {label: '银行', value: '银行'},
+        {label: '个人', value: '个人'}
+      ],
+      projectTypeOption: [
+        {label: '保养', value: '保养'},
+        {label: '改造', value: '改造'},
+        {label: '维修', value: '维修'},
+        {label: '板胶', value: '板胶'},
+        {label: '供货', value: '供货'},
+        {label: '五金', value: '五金'},
+        {label: '零售', value: '零售'}
+      ],
+      warnTipOption: [
+        {label: '全部', value: '全部'},
+        {label: '进度节点', value: '进度节点'},
+        {label: '收款节点', value: '收款节点'}
+      ],
+      makeLetterOption: [
+        {label: '有保函', value: '有保函'},
+        {label: '预付款保函', value: '预付款保函'},
+        {label: '履约保函', value: '履约保函'},
+        {label: '质量保函', value: '质量保函'}
+      ],
+      subcontractItemOption: [
+        {label: '有分包项目', value: '有分包项目'},
+        {label: '无分包项目', value: '无分包项目'}
+      ],
+      receivablesContionOption: [
+        {label: '收款全部完成', value: '收款全部完成'}
+      ],
+      completionProjectOption: [
+        {label: '全部', value: '全部'},
+        {label: '已竣工', value: '已竣工'},
+        {label: '未竣工', value: '未竣工'}
+      ],
+      advancesOption: [
+        {label: '有垫资项目', value: '有垫资项目'}
+      ],
+      inQualityOption: [],
       contractPriceList: [
         {label: '全部', value: -1},
         {label: '99万元以下', value: 0},
@@ -465,10 +600,6 @@ export default {
         {label: '2017', value: '2017'},
         {label: '2018', value: '2018'},
         {label: '2019', value: '2019'}
-      ],
-      warnTipList: [
-        {label: '全部', value: -1},
-        {label: '具有报警的项目', value: 0}
       ],
       signAndFinishList: [
         {label: '全部', value: -1},
@@ -487,11 +618,6 @@ export default {
         {label: '一般项目', value: 1},
         {label: '难收尾项目', value: 2}
       ],
-      receivablesContionList: [
-        {label: '全部', value: -1},
-        {label: '收款全部完成', value: 0},
-        {label: '未收预收款', value: 1}
-      ],
       performBondList: [
         {label: '全部', value: -1},
         {label: '具有履约保证金的项目', value: 0}
@@ -501,16 +627,11 @@ export default {
         {label: '具有质量保证金的项目', value: 0}
       ],
       shipmentRateList: [],
-      inQualityList: [
-        {label: '全部', value: -1},
-        {label: '无质保的项目', value: 0},
-        {label: '有质保的项目', value: 1}
-      ],
       subItemsList: [
         {label: '全部', value: -1},
         {label: '具有分包的项目', value: 0}
       ],
-      sortList: ['按签约价', '按结算价', '按毛利率', '按总进度', '按出货率', '按收款率', '按商务人', '按项目经理']
+      sortList: ['按签约价', '按结算价', '按预算毛利率', '按实际买利率', '按资金占用', '按出货率', '按收款率', '按商务', '按项目经理']
     }
   },
   created () {
@@ -530,6 +651,7 @@ export default {
     }),
     formFilter: {
       get: function () {
+        console.log(this.$store.state.formFilter)
         return this.$store.state.formFilter
       },
       set: function (newValue) {
@@ -625,6 +747,8 @@ export default {
         this.resultData = (JSON.parse(HtmlStr)).map(item => {
           item['开工日期'] = item['开工日期'] ? item['开工日期'].slice(0, 10) : ''
           item['完工日期'] = item['完工日期'] ? item['完工日期'].slice(0, 10) : ''
+          item['费用金额2'] = item['费用金额'] ? item['费用金额'].toFixed(2) : ''
+          item['成本2'] = item['成本'] ? item['成本'].toFixed(2) : ''
           return item
         })
         loadingInstance.close()
@@ -661,6 +785,10 @@ export default {
         let HtmlStr = $(Result).html()
         this.sum = JSON.parse(HtmlStr)[0].fcount
       }).catch((error) => {
+        this.$message({
+          message: '接口报错!',
+          type: 'error'
+        })
         console.log(error)
       })
     },
@@ -747,12 +875,13 @@ export default {
 .sortBlock{
   height: 200px;
   overflow-y: scroll;
+  text-align: left;
 }
 .vagueSearchBlock{
-  height: 50px;
+  // height: 50px;
   padding: 0 5px;
 }
 .WidthFull{
-  width: 100%;
+  width: 80%;
 }
 </style>

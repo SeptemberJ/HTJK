@@ -94,6 +94,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { Loading } from 'element-ui'
 import $ from 'jquery'
 export default {
   name: 'Outlay',
@@ -130,6 +131,11 @@ export default {
       this.$router.push({name: 'InfoDynamicTable'})
     },
     getOutlayList () {
+      let loadingInstance = Loading.service({
+        lock: true,
+        text: '加载中',
+        spinner: 'el-icon-loading'
+      })
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
@@ -167,12 +173,17 @@ export default {
           }
           Info.map((item, idx) => {
             sumLine.F9 = (Number(sumLine.F9) + Number(item.F9)).toFixed(2)
+            if (idx === Info.length - 1) {
+              this.outlayList = Info.concat(sumLine)
+              loadingInstance.close()
+            }
           })
-          this.outlayList = Info.concat(sumLine)
         } else {
           this.outlayList = Info
+          loadingInstance.close()
         }
       }).catch((error) => {
+        loadingInstance.close()
         console.log(error)
       })
     },

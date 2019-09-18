@@ -193,6 +193,76 @@
             </p>
           </div>
         </section>
+        <!-- 第一季度 -->
+        <section v-if="processName == '第一季度'">
+          <p v-if="fileList['第一季度']['工作单'].length == 0" class="TextAlignL PaddingL_28">无相关文件</p>
+          <div v-else>
+            <span class="secondTit">工作单</span>
+            <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['第一季度']['工作单']" :key="idx">
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span style="float:right;">
+                {{file.fileDate}}
+                <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
+              </span>
+            </p>
+          </div>
+        </section>
+        <!-- 第二季度 -->
+        <section v-if="processName == '第二季度'">
+          <p v-if="fileList['第二季度']['工作单'].length == 0" class="TextAlignL PaddingL_28">无相关文件</p>
+          <div v-else>
+            <span class="secondTit">工作单</span>
+            <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['第二季度']['工作单']" :key="idx">
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span style="float:right;">
+                {{file.fileDate}}
+                <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
+              </span>
+            </p>
+          </div>
+        </section>
+        <!-- 第三季度 -->
+        <section v-if="processName == '第三季度'">
+          <p v-if="fileList['第三季度']['工作单'].length == 0" class="TextAlignL PaddingL_28">无相关文件</p>
+          <div v-else>
+            <span class="secondTit">工作单</span>
+            <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['第三季度']['工作单']" :key="idx">
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span style="float:right;">
+                {{file.fileDate}}
+                <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
+              </span>
+            </p>
+          </div>
+        </section>
+        <!-- 第四季度 -->
+        <section v-if="processName == '第四季度'">
+          <p v-if="fileList['第四季度']['工作单'].length == 0" class="TextAlignL PaddingL_28">无相关文件</p>
+          <div v-else>
+            <span class="secondTit">工作单</span>
+            <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['第四季度']['工作单']" :key="idx">
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span style="float:right;">
+                {{file.fileDate}}
+                <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
+              </span>
+            </p>
+          </div>
+        </section>
+        <!-- 合同到期 -->
+        <section v-if="processName == '合同到期'">
+          <p v-if="fileList['合同到期']['工作单'].length == 0" class="TextAlignL PaddingL_28">无相关文件</p>
+          <div v-else>
+            <span class="secondTit">工作单</span>
+            <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['合同到期']['工作单']" :key="idx">
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span style="float:right;">
+                {{file.fileDate}}
+                <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
+              </span>
+            </p>
+          </div>
+        </section>
         <!-- 新增文件 -->
         <div v-if="processStatus != 2">
           <p class="TextAlignL MarginT_20 MarginB_20"><b>上传新文件：（ 文件格式需为doc/pdf ）</b></p>
@@ -748,6 +818,181 @@
               </el-row>
             </el-form>
           </section>
+          <!-- 第一季度 -->
+          <section v-if="processName == '第一季度'">
+            <el-form :model="formDyjd" :rules="rulesFile" ref="formDyjd" label-width="100px" label-position="left">
+              <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="工作单" prop="fileName" class="TextAlignL">
+                      <el-row>
+                        <el-upload
+                          class="upload-demo"
+                          ref="upload_formDyjd"
+                          v-model="formDyjd.fileName"
+                          :action="uploadAdr"
+                          accept=".pdf,.doc,.PDF"
+                          :file-list="curFileList_formDyjd"
+                          :on-change="(file, fileList)=>{changeFile(file, fileList, 'formDyjd')}"
+                          :before-upload="beforeUpload"
+                          :on-success="(val)=>{handleUploadSuccess(val, '工作单', 'formDyjd')}"
+                          :on-remove="(file, fileList)=>{removeFile(file, fileList, 'formDyjd')}"
+                          :auto-upload="false">
+                          <el-button slot="trigger" size="small" icon="el-icon-upload" type="">选取文件</el-button>
+                        </el-upload>
+                      </el-row>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formDyjd.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
+                    <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formDyjd', '工作单')">提 交</el-button>
+                  </el-col>
+              </el-row>
+            </el-form>
+          </section>
+          <!-- 第二季度 -->
+          <section v-if="processName == '第二季度'">
+            <el-form :model="formDejd" :rules="rulesFile" ref="formDejd" label-width="100px" label-position="left">
+              <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="工作单" prop="fileName" class="TextAlignL">
+                      <el-row>
+                        <el-upload
+                          class="upload-demo"
+                          ref="upload_formDejd"
+                          v-model="formDejd.fileName"
+                          :action="uploadAdr"
+                          accept=".pdf,.doc,.PDF"
+                          :file-list="curFileList_formDejd"
+                          :on-change="(file, fileList)=>{changeFile(file, fileList, 'formDejd')}"
+                          :before-upload="beforeUpload"
+                          :on-success="(val)=>{handleUploadSuccess(val, '工作单', 'formDejd')}"
+                          :on-remove="(file, fileList)=>{removeFile(file, fileList, 'formDejd')}"
+                          :auto-upload="false">
+                          <el-button slot="trigger" size="small" icon="el-icon-upload" type="">选取文件</el-button>
+                        </el-upload>
+                      </el-row>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formDejd.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
+                    <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formDejd', '工作单')">提 交</el-button>
+                  </el-col>
+              </el-row>
+            </el-form>
+          </section>
+          <!-- 第三季度 -->
+          <section v-if="processName == '第三季度'">
+            <el-form :model="formDsjd" :rules="rulesFile" ref="formDsjd" label-width="100px" label-position="left">
+              <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="工作单" prop="fileName" class="TextAlignL">
+                      <el-row>
+                        <el-upload
+                          class="upload-demo"
+                          ref="upload_formDsjd"
+                          v-model="formDsjd.fileName"
+                          :action="uploadAdr"
+                          accept=".pdf,.doc,.PDF"
+                          :file-list="curFileList_formDsjd"
+                          :on-change="(file, fileList)=>{changeFile(file, fileList, 'formDsjd')}"
+                          :before-upload="beforeUpload"
+                          :on-success="(val)=>{handleUploadSuccess(val, '工作单', 'formDsjd')}"
+                          :on-remove="(file, fileList)=>{removeFile(file, fileList, 'formDsjd')}"
+                          :auto-upload="false">
+                          <el-button slot="trigger" size="small" icon="el-icon-upload" type="">选取文件</el-button>
+                        </el-upload>
+                      </el-row>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formDsjd.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
+                    <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formDsjd', '工作单')">提 交</el-button>
+                  </el-col>
+              </el-row>
+            </el-form>
+          </section>
+          <!-- 第四季度 -->
+          <section v-if="processName == '第四季度'">
+            <el-form :model="formDfjd" :rules="rulesFile" ref="formDfjd" label-width="100px" label-position="left">
+              <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="工作单" prop="fileName" class="TextAlignL">
+                      <el-row>
+                        <el-upload
+                          class="upload-demo"
+                          ref="upload_formDfjd"
+                          v-model="formDfjd.fileName"
+                          :action="uploadAdr"
+                          accept=".pdf,.doc,.PDF"
+                          :file-list="curFileList_formDfjd"
+                          :on-change="(file, fileList)=>{changeFile(file, fileList, 'formDfjd')}"
+                          :before-upload="beforeUpload"
+                          :on-success="(val)=>{handleUploadSuccess(val, '工作单', 'formDfjd')}"
+                          :on-remove="(file, fileList)=>{removeFile(file, fileList, 'formDfjd')}"
+                          :auto-upload="false">
+                          <el-button slot="trigger" size="small" icon="el-icon-upload" type="">选取文件</el-button>
+                        </el-upload>
+                      </el-row>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formDfjd.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
+                    <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formDfjd', '工作单')">提 交</el-button>
+                  </el-col>
+              </el-row>
+            </el-form>
+          </section>
+          <!-- 合同到期 -->
+          <section v-if="processName == '合同到期'">
+            <el-form :model="formHtdq" :rules="rulesFile" ref="formHtdq" label-width="100px" label-position="left">
+              <el-row>
+                  <el-col :span="12">
+                    <el-form-item label="工作单" prop="fileName" class="TextAlignL">
+                      <el-row>
+                        <el-upload
+                          class="upload-demo"
+                          ref="upload_formHtdq"
+                          v-model="formHtdq.fileName"
+                          :action="uploadAdr"
+                          accept=".pdf,.doc,.PDF"
+                          :file-list="curFileList_formHtdq"
+                          :on-change="(file, fileList)=>{changeFile(file, fileList, 'formHtdq')}"
+                          :before-upload="beforeUpload"
+                          :on-success="(val)=>{handleUploadSuccess(val, '工作单', 'formHtdq')}"
+                          :on-remove="(file, fileList)=>{removeFile(file, fileList, 'formHtdq')}"
+                          :auto-upload="false">
+                          <el-button slot="trigger" size="small" icon="el-icon-upload" type="">选取文件</el-button>
+                        </el-upload>
+                      </el-row>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="" prop="checked" class="TextAlignL">
+                      <el-checkbox v-model="formHtdq.checked">无必要文件</el-checkbox>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="4" class="TextAlignR">
+                    <el-button type="primary" v-if="processStatus != 2" @click="uploadFile('formHtdq', '工作单')">提 交</el-button>
+                  </el-col>
+              </el-row>
+            </el-form>
+          </section>
         </div>
       </section>
       <section>
@@ -786,8 +1031,8 @@
         </el-form>
       </section>
       <span slot="footer" class="dialog-footer TextAlignC" style="width: 100%;display: inline-block;">
-        <el-button type="danger" @click="finish" v-if="processStatus != 2">确认完成</el-button>
-        <el-button type="danger" @click="backUnFinished" v-if="processStatus == 2 || processStatus == 3">反确认</el-button>
+        <el-button type="danger" @click="finish" v-if="processStatus != 2" :loading="btLoading">确认完成</el-button>
+        <el-button type="danger" @click="backUnFinished" v-if="processStatus == 2 || processStatus == 3" :loading="btLoading">反确认</el-button>
       </span>
     </el-dialog>
   </div>
@@ -802,6 +1047,7 @@ export default {
   data () {
     return {
       dialogProcessVisible: true,
+      btLoading: false,
       fileUrl: '',
       formHtqd: {
         fileName: '',
@@ -878,6 +1124,31 @@ export default {
         percent: '',
         checked: false
       },
+      formDyjd: {
+        fileName: '',
+        percent: '',
+        checked: false
+      },
+      formDejd: {
+        fileName: '',
+        percent: '',
+        checked: false
+      },
+      formDsjd: {
+        fileName: '',
+        percent: '',
+        checked: false
+      },
+      formDfjd: {
+        fileName: '',
+        percent: '',
+        checked: false
+      },
+      formHtdq: {
+        fileName: '',
+        percent: '',
+        checked: false
+      },
       formAppend: {
         fileName: '',
         percent: '',
@@ -908,6 +1179,11 @@ export default {
       curFileList_formXmyj: [],
       curFileList_formZbks: [],
       curFileList_formZbjs: [],
+      curFileList_formDyjd: [],
+      curFileList_formDejd: [],
+      curFileList_formDsjd: [],
+      curFileList_formDfjd: [],
+      curFileList_formHtdq: [],
       fileList: {
         '合同签订': {'销售合同': []},
         '进场施工': {'开工报告': [], '工程交底会议': [], '项目流转单': []},
@@ -918,10 +1194,15 @@ export default {
         '审价结算': {'审计报告': []},
         '项目移交': {'同竣工验收资料': []},
         '质保开始': {'调试验收单': []},
-        '质保结束': {'文件': []}
+        '质保结束': {'文件': []},
+        '第一季度': {'工作单': []},
+        '第二季度': {'工作单': []},
+        '第三季度': {'工作单': []},
+        '第四季度': {'工作单': []},
+        '合同到期': {'工作单': []}
       },
-      ifShowUpload: false,
-      liuCheng: ['放号', '合同签订', '进场施工', '设备到现场', '隐蔽验收', '安装调试', '竣工验收', '审价结算', '项目移交', '质保开始', '质保结束']
+      ifShowUpload: false
+      // liuCheng: ['放号', '合同签订', '进场施工', '设备到现场', '隐蔽验收', '安装调试', '竣工验收', '审价结算', '项目移交', '质保开始', '质保结束']
     }
   },
   computed: {
@@ -1080,7 +1361,12 @@ export default {
         '审价结算': {'审计报告': []},
         '项目移交': {'同竣工验收资料': []},
         '质保开始': {'调试验收单': []},
-        '质保结束': {'文件': []}
+        '质保结束': {'文件': []},
+        '第一季度': {'工作单': []},
+        '第二季度': {'工作单': []},
+        '第三季度': {'工作单': []},
+        '第四季度': {'工作单': []},
+        '合同到期': {'工作单': []}
       }
     },
     // 查询之前上传的文件
@@ -1360,9 +1646,60 @@ export default {
             this.surefinish()
           }
           break
+        case '第一季度':
+          if (this.fileList['第一季度']['工作单'].length === 0 && !this.formDyjd.checked) {
+            this.$message({
+              message: '文件尚未上传完整，目前不能确认完成!',
+              type: 'warning'
+            })
+          } else {
+            this.surefinish()
+          }
+          break
+        case '第二季度':
+          if (this.fileList['第二季度']['工作单'].length === 0 && !this.formDejd.checked) {
+            this.$message({
+              message: '文件尚未上传完整，目前不能确认完成!',
+              type: 'warning'
+            })
+          } else {
+            this.surefinish()
+          }
+          break
+        case '第三季度':
+          if (this.fileList['第三季度']['工作单'].length === 0 && !this.formDsjd.checked) {
+            this.$message({
+              message: '文件尚未上传完整，目前不能确认完成!',
+              type: 'warning'
+            })
+          } else {
+            this.surefinish()
+          }
+          break
+        case '第四季度':
+          if (this.fileList['第四季度']['工作单'].length === 0 && !this.formDfjd.checked) {
+            this.$message({
+              message: '文件尚未上传完整，目前不能确认完成!',
+              type: 'warning'
+            })
+          } else {
+            this.surefinish()
+          }
+          break
+        case '合同到期':
+          if (this.fileList['合同到期']['工作单'].length === 0 && !this.formHtdq.checked) {
+            this.$message({
+              message: '文件尚未上传完整，目前不能确认完成!',
+              type: 'warning'
+            })
+          } else {
+            this.surefinish()
+          }
+          break
       }
     },
     surefinish () {
+      this.btLoading = true
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
@@ -1389,19 +1726,24 @@ export default {
             message: '确认成功!',
             type: 'success'
           })
+          this.btLoading = false
           this.$emit('toggleProcessDialog', false)
-          this.$emit('markRed', this.curEditIdx)
+          // this.$emit('markRed', this.curEditIdx)
+          this.$emit('refresh')
         } else {
+          this.btLoading = false
           this.$message({
             message: '确认失败!',
             type: 'error'
           })
         }
       }).catch((error) => {
+        this.btLoading = false
         console.log(error)
       })
     },
     backUnFinished () {
+      this.btLoading = true
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
@@ -1429,15 +1771,18 @@ export default {
             message: '反确认成功!',
             type: 'success'
           })
+          this.btLoading = false
           this.$emit('toggleProcessDialog', false)
           this.$emit('refresh')
         } else {
+          this.btLoading = false
           this.$message({
             message: '反确认失败!',
             type: 'error'
           })
         }
       }).catch((error) => {
+        this.btLoading = false
         console.log(error)
       })
     },

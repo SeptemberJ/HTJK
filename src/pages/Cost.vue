@@ -65,6 +65,7 @@
       <el-table-column
         property="F10"
         label="实发数量"
+        width="120"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
@@ -139,6 +140,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { Loading } from 'element-ui'
 import $ from 'jquery'
 export default {
   name: 'Cost',
@@ -157,6 +159,11 @@ export default {
   },
   methods: {
     getCostList () {
+      let loadingInstance = Loading.service({
+        lock: true,
+        text: '加载中',
+        spinner: 'el-icon-loading'
+      })
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
@@ -203,15 +210,20 @@ export default {
             F23: ''
           }
           Info.map((item, idx) => {
-            sumLine.F10 = (Number(sumLine.F9) + Number(item.F10)).toFixed(2)
-            sumLine.F12 = (Number(sumLine.F9) + Number(item.F12)).toFixed(2)
-            sumLine.F14 = (Number(sumLine.F9) + Number(item.F14)).toFixed(2)
+            sumLine.F10 = (Number(sumLine.F10) + Number(item.F10)).toFixed(2)
+            sumLine.F12 = (Number(sumLine.F12) + Number(item.F12)).toFixed(2)
+            sumLine.F14 = (Number(sumLine.F14) + Number(item.F14)).toFixed(2)
+            if (idx === Info.length - 1) {
+              this.costList = Info.concat(sumLine)
+              loadingInstance.close()
+            }
           })
-          this.costList = Info.concat(sumLine)
         } else {
           this.costList = Info
+          loadingInstance.close()
         }
       }).catch((error) => {
+        loadingInstance.close()
         console.log(error)
       })
     },

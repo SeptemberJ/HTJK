@@ -8,17 +8,17 @@
           <el-row>
             <el-col :span="6">
               <el-form-item label="隶属公司">
-                <el-input v-model="formBasic.subsidiary" disabled></el-input>
+                <el-input v-model="formBasic.subsidiary" disabled :title="formBasic.subsidiary"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="客户名称">
-                <el-input v-model="formBasic.customerName" disabled></el-input>
+                <el-input v-model="formBasic.customerName" disabled :title="formBasic.customerName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="项目名称">
-                <el-input v-model="formBasic.projectName" disabled></el-input>
+                <el-input v-model="formBasic.projectName" disabled :title="formBasic.projectName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="4">
@@ -182,8 +182,9 @@
       <!-- 收款比例 -->
       <el-col :span="24">
         <div class="ModuleTit TextAlignL">收款比例</div>
+        <!-- <section v-if="receiptRateInfo.length > 0" class="TextAlignL MarginB_10" style="font-size: 14px;padding:0 5px 5px 20px;"> -->
         <section v-if="receiptRateInfo.length > 0" class="TextAlignL MarginB_10" style="font-size: 14px;height: 150px;overflow-y: scroll;padding:0 5px 5px 20px;">
-          <el-row style="margin-bottom: 10px; font-weight: bold;">
+          <!-- <el-row style="margin-bottom: 10px; font-weight: bold;">
             <el-col :span="4">项目</el-col>
             <el-col :span="4">实际比例</el-col>
             <el-col :span="4">应收金额</el-col>
@@ -198,11 +199,52 @@
               <el-col :span="4">{{item.fyingshou}}</el-col>
               <el-col :span="4">{{item.fshiji}}</el-col>
               <el-col :span="4">{{(item.fyingshou - item.fshiji).toFixed(2)}}</el-col>
-              <el-col :span="4"></el-col>
+              <el-col :span="4">{{item.fdate}}</el-col>
             </el-row>
-            <!-- <span>{{idx + 1}}. {{item.FName}}</span>
-            <span style="margin-left: 100px;">{{item.fpercent}}</span> -->
-          </div>
+          </div> -->
+          <el-row>
+            <el-col :span="20">
+              <el-row style="margin-bottom: 10px; font-weight: bold;">
+                <el-col :span="4">项目</el-col>
+                <el-col :span="2">实际比例</el-col>
+                <el-col :span="4">应收金额</el-col>
+                <el-col :span="4">实际金额</el-col>
+                <el-col :span="4">未收金额</el-col>
+                <el-col :span="6">收款时间</el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="4">
+              <el-row style="margin-bottom: 10px; font-weight: bold;">
+                <el-col>收款条件</el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
+              <div v-for="(item, idx) in receiptRateInfo" :key="idx" class="text item MarginB_10">
+                <el-row>
+                  <el-col :span="4">{{idx + 1}}. {{item.FName}}</el-col>
+                  <el-col :span="2">{{item.fpercent}}</el-col>
+                  <el-col :span="4">{{item.fyingshou}}</el-col>
+                  <el-col :span="4">{{item.fshiji}}</el-col>
+                  <el-col :span="4">{{(item.fyingshou - item.fshiji).toFixed(2)}}</el-col>
+                  <el-col :span="6">
+                    <el-date-picker style="width: 65%;" size="mini" @change="(value) => saveDate(value, item.FName)"
+                      v-model="item.fdate"
+                      type="date"
+                      value-format="yyyy-MM-dd"
+                      placeholder="选择日期">
+                    </el-date-picker>
+                    <!-- <el-button size="mini" type="danger" @click="saveDate(item.FName, item.fdate)">保存</el-button> -->
+                  </el-col>
+                </el-row>
+              </div>
+            </el-col>
+            <el-col :span="4">
+              <el-input type="textarea" :rows="4" placeholder="请输入收款条件" v-model="receiptRateInfo[0].Fnote"></el-input>
+              <el-button size="mini" type="danger" style="margin-top: 5px;" @click="saveCollectionCondition(receiptRateInfo[0].Fnote)">保存</el-button>
+            </el-col>
+          </el-row>
         </section>
         <!-- 无数据 -->
         <section v-else class="TextAlignL MarginB_10" style="font-size: 14px;height: 100px;">
@@ -227,9 +269,10 @@
         <div :class="{'LineItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3 || item.status == 1 && idx < curLuiChengIdx}" v-show="idx > 0"></div>
         <div class="DotItemwrap">
           <div class="TextItem">
-            <p>{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' || item.tit == '质保结束' ? formBasic.swry : formBasic.xmjl}}</p>
-            <p v-if="item.tit == '设备到现场'">{{wsjeSB > 0 ? wsjeSB : ''}}</p>
-            <p v-if="item.status == 3 && item.tit == '质保结束'">{{formBasic.wsje > 0 ? formBasic.wsje : ''}}</p>
+            <!-- <p :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{item.node.txt}}</p> -->
+            <p>{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' || item.tit == '质保结束' || item.tit == '合同到期' ? formBasic.swry : formBasic.xmjl}}</p>
+            <p v-if="item.tit == '设备到现场'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{wsjeSB >= 0 ? wsjeSB : ''}}</p>
+            <p v-if="item.status == 3 && item.tit == '质保结束'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{formBasic.wsje >= 0 ? formBasic.wsje : ''}}</p>
           </div>
           <div :class="{'DotItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3 || item.status == 1 && idx < curLuiChengIdx}"></div>
           <div class="TextItem">
@@ -272,7 +315,8 @@ export default {
       warnList: ['预收款未收齐'],
       steps: [],
       curTimeStamp: '',
-      liuCheng: ['放号', '合同签订', '进场施工', '设备到现场', '隐蔽验收', '安装调试', '竣工验收', '审价结算', '项目移交', '质保开始', '质保结束']
+      liuCheng: ['放号', '合同签订', '进场施工', '设备到现场', '隐蔽验收', '安装调试', '竣工验收', '审价结算', '项目移交', '质保开始', '质保结束'],
+      liuChengSecond: ['放号', '合同签订', '第一季度', '第二季度', '第三季度', '第四季度', '合同到期']
     }
   },
   components: {
@@ -388,9 +432,15 @@ export default {
         text: '加载中',
         spinner: 'el-icon-loading'
       })
-      let ReceiptRate = await this.getReceiptRate()
-      let Author = await this.getAuthor()
-      this.getBasicInfor(ReceiptRate, Author, loadingInstance)
+      // let ReceiptRate = await this.getReceiptRate()
+      // let Author = await this.getAuthor()
+      // this.getBasicInfor(ReceiptRate, Author, loadingInstance)
+      Promise.all([this.getReceiptRate(), this.getAuthor()]).then((result) => {
+        console.log('ReceiptRate and Author', result)
+        this.getBasicInfor(result[0], result[1], loadingInstance)
+      }).catch((error) => {
+        console.log(error)
+      })
     },
     getBasicInfor (ReceiptRate, Author, loadingInstance) {
       var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
@@ -417,6 +467,7 @@ export default {
           let zbTimeStamp = Info['质保至'] ? (new Date(Info['质保至'])).getTime() : curTimeStamp
           let hasShouKuang = true
           this.formBasic = {
+            isWbxm: Info['是否维保项目'] === '是',
             subsidiary: Info['隶属公司'],
             contractNo: Info['合同号'],
             projectName: Info['项目名称'],
@@ -439,8 +490,8 @@ export default {
             chl: Info['出货率'],
             skl: Info['收款率'],
             jgrq: Info['竣工日期'],
-            fyhj: Info['费用合计'],
-            cbhj: Info['成本合计'],
+            fyhj: Info['费用合计'].toFixed(2),
+            cbhj: Info['成本合计'].toFixed(2),
             zbq: Info['质保期'],
             zbks: Info['质保起'],
             zbjs: Info['质保至'],
@@ -451,39 +502,49 @@ export default {
             let skl = Info['收款率'].slice(0, Info['收款率'].length - 1)
             hasShouKuang = Number(ys) <= Number(skl)
           }
-          // console.log(ys)
-          // console.log(skl)
-          // console.log(hasShouKuang)
-          this.steps = [
-            {status: Info['放号'], date: '', tit: '放号', author: Author['放号']},
-            {status: Info['合同签订'], date: '', tit: '合同签订', author: Author['合同签订']},
-            {status: Info['进场施工'], date: '', tit: '进场施工', author: Author['进场施工']},
-            {status: Info['设备到现场'] === 2 && (!hasShouKuang || Number(this.wsjeSB) > 0) ? 3 : Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
-            // {status: Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
-            {status: Info['隐蔽验收'], date: '', tit: '隐蔽验收', author: Author['隐蔽验收']},
-            {status: Info['安装调试'], date: '', tit: '安装调试', author: Author['安装调试']},
-            {status: Info['竣工验收'], date: '', tit: '竣工验收', author: Author['竣工验收']},
-            {status: Info['审价结算'], date: '', tit: '审价结算', author: Author['审价结算']},
-            {status: Info['项目移交'], date: '', tit: '项目移交', author: Author['项目移交']},
-            {status: Info['质保开始'], date: '', tit: '质保开始', author: Author['质保开始']},
-            {status: curTimeStamp > zbTimeStamp ? (Info['收款率'] === '100.00%' ? 2 : 3) : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束']}
-            // {status: curTimeStamp > zbTimeStamp && Info['收款率'] === '100.00%' ? 3 : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束']}
-          ]
+          if (Info['是否维保项目'] === '否') {
+            this.steps = [
+              {status: Info['放号'], date: '', tit: '放号', author: Author['放号'], node: {txt: '--', color: 2}},
+              {status: Info['合同签订'], date: '', tit: '合同签订', author: Author['合同签订'], node: {txt: '--', color: 2}},
+              {status: Info['进场施工'], date: '', tit: '进场施工', author: Author['进场施工'], node: {txt: '预付款', color: Info['f6']}},
+              {status: Info['设备到现场'] === 2 && (!hasShouKuang || Number(this.wsjeSB) > 0) ? 3 : Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场'], node: {txt: '货到付款', color: Info['f7']}},
+              // {status: Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
+              {status: Info['隐蔽验收'], date: '', tit: '隐蔽验收', author: Author['隐蔽验收'], node: {txt: '隐蔽验收', color: Info['f8']}},
+              {status: Info['安装调试'], date: '', tit: '安装调试', author: Author['安装调试'], node: {txt: '--', color: 2}},
+              {status: Info['竣工验收'], date: '', tit: '竣工验收', author: Author['竣工验收'], node: {txt: '合同项目验收', color: Info['f9']}},
+              {status: Info['审价结算'], date: '', tit: '审价结算', author: Author['审价结算'], node: {txt: '审计审价', color: Info['f10']}},
+              {status: Info['项目移交'], date: '', tit: '项目移交', author: Author['项目移交'], node: {txt: '--', color: 2}},
+              {status: Info['质保开始'], date: '', tit: '质保开始', author: Author['质保开始'], node: {txt: '--', color: 2}},
+              {status: curTimeStamp > zbTimeStamp ? (Info['收款率'] === '100.00%' ? 2 : 3) : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束'], node: {txt: '质保金', color: Info['f11']}}
+              // {status: curTimeStamp > zbTimeStamp && Info['收款率'] === '100.00%' ? 3 : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束']}
+            ]
+          } else {
+            this.steps = [
+              {status: Info['放号'], date: '', tit: '放号', author: true, node: {txt: '--', color: 2}},
+              {status: Info['合同签订'], date: '', tit: '合同签订', author: true, node: {txt: '--', color: 2}},
+              {status: Info['第一季度'], date: '', tit: '第一季度', author: true, node: {txt: '第一季度', color: Info['f1']}},
+              {status: Info['第二季度'], date: '', tit: '第二季度', author: true, node: {txt: '第二季度', color: Info['f2']}},
+              {status: Info['第三季度'], date: '', tit: '第三季度', author: true, node: {txt: '第三季度', color: Info['f3']}},
+              {status: Info['第四季度'], date: '', tit: '第四季度', author: true, node: {txt: '第四季度', color: Info['f4']}},
+              {status: Info['合同到期'], date: '', tit: '合同到期', author: true, node: {txt: '合同到期', color: Info['f5']}}
+            ]
+          }
           // 判断当前流程
+          let LiuChengList = Info['是否维保项目'] === '否' ? this.liuCheng : this.liuChengSecond
           if (Info['放号'] === 1) {
             this.curLuiCheng = ''
             this.curLuiChengIdx = 0
           } else {
             for (let i = 0; i < 11; i++) {
-              if (Info[this.liuCheng[i]] === 2 && Info[this.liuCheng[i + 1]] !== 0) {
-                this.curLuiCheng = this.liuCheng[i + 1]
+              if (Info[LiuChengList[i]] === 2 && Info[LiuChengList[i + 1]] !== 0) {
+                this.curLuiCheng = LiuChengList[i + 1]
                 this.curLuiChengIdx = Number(i) + 1
               }
               // 有禁止操作项时
-              if (Info[this.liuCheng[i]] === 2 && Info[this.liuCheng[i + 1]] === 0) {
-                for (let j = i + 1; j < 11; j++) {
-                  if (Info[this.liuCheng[j]] === 1) {
-                    this.curLuiCheng = this.liuCheng[j] ? this.liuCheng[j] : ''
+              if (Info[LiuChengList[i]] === 2 && Info[LiuChengList[i + 1]] === 0) {
+                for (let j = i + 1; j < LiuChengList.length; j++) {
+                  if (Info[LiuChengList[j]] === 1) {
+                    this.curLuiCheng = LiuChengList[j] ? LiuChengList[j] : ''
                     this.curLuiChengIdx = Number(j) ? Number(j) : 100
                     break
                   }
@@ -502,13 +563,9 @@ export default {
           if (ReceiptRate[1]) {
             this.wsjeSB = (ReceiptRate[1].fyingshou - ReceiptRate[1].fshiji).toFixed(2)
           } else {
-            this.wsjeSB = '0.00'
+            this.wsjeSB = 0
           }
           this.receiptRateInfo = ReceiptRate
-          // this.receiptRateInfo = ReceiptRate.map(item => {
-          //   item.sj = (item.fyingshou - item.fshiji).toFixed(2)
-          //   return item
-          // })
           loadingInstance.close()
         } else {
           this.$message({
@@ -540,9 +597,7 @@ export default {
         // 提取数据
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
-        let Info = (JSON.parse(HtmlStr))
-        console.log('reyuan', Info)
-        this.swryHistory = Info
+        this.swryHistory = JSON.parse(HtmlStr)
       }).catch((error) => {
         console.log(error)
       })
@@ -565,8 +620,7 @@ export default {
         // 提取数据
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
-        let Info = (JSON.parse(HtmlStr))
-        this.xmjlHistory = Info
+        this.xmjlHistory = JSON.parse(HtmlStr)
       }).catch((error) => {
         console.log(error)
       })
@@ -590,9 +644,7 @@ export default {
           // 提取数据
           let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
           let HtmlStr = $(Result).html()
-          let Info = (JSON.parse(HtmlStr))
-          console.log('ReceiptRate--', Info)
-          resolve(Info)
+          resolve(JSON.parse(HtmlStr))
         }).catch((error) => {
           console.log(error)
         })
@@ -617,8 +669,7 @@ export default {
           // 提取数据
           let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
           let HtmlStr = $(Result).html()
-          let Info = (JSON.parse(HtmlStr))[0]
-          resolve(Info)
+          resolve((JSON.parse(HtmlStr))[0])
         }).catch((error) => {
           console.log(error)
         })
@@ -673,6 +724,77 @@ export default {
     },
     toCost () {
       this.$router.push({name: 'Cost'})
+    },
+    saveDate (FDate, FName) {
+      var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
+      tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
+      tmpData += '<soap:Body> '
+      tmpData += '<skDate  xmlns="http://tempuri.org/">'
+      tmpData += '<FContractNo>' + this.curContractNo + '</FContractNo>'
+      tmpData += '<FDB>' + this.curDB + '</FDB>'
+      tmpData += '<FName>' + FName + '</FName>'
+      tmpData += '<FDate>' + FDate + '</FDate>'
+      tmpData += '</skDate >'
+      tmpData += '</soap:Body>'
+      tmpData += '</soap:Envelope>'
+      this.Http.post('skDate', tmpData
+      ).then(res => {
+        let xml = res.data
+        let parser = new DOMParser()
+        let xmlDoc = parser.parseFromString(xml, 'text/xml')
+        // 提取数据
+        let Result = xmlDoc.getElementsByTagName('skDateResponse')[0].getElementsByTagName('skDateResult')[0]
+        let HtmlStr = $(Result).html()
+        let Info = (JSON.parse(HtmlStr))[0]
+        if (Info.code === '1') {
+          this.$message({
+            message: '收款时间保存成功!',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '收款时间保存失败!',
+            type: 'error'
+          })
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+    saveCollectionCondition (FNote) {
+      var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
+      tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
+      tmpData += '<soap:Body> '
+      tmpData += '<skNote  xmlns="http://tempuri.org/">'
+      tmpData += '<FContractNo>' + this.curContractNo + '</FContractNo>'
+      tmpData += '<FDB>' + this.curDB + '</FDB>'
+      tmpData += '<FNote>' + FNote + '</FNote>'
+      tmpData += '</skNote >'
+      tmpData += '</soap:Body>'
+      tmpData += '</soap:Envelope>'
+      this.Http.post('skNote', tmpData
+      ).then(res => {
+        let xml = res.data
+        let parser = new DOMParser()
+        let xmlDoc = parser.parseFromString(xml, 'text/xml')
+        // 提取数据
+        let Result = xmlDoc.getElementsByTagName('skNoteResponse')[0].getElementsByTagName('skNoteResult')[0]
+        let HtmlStr = $(Result).html()
+        let Info = (JSON.parse(HtmlStr))[0]
+        if (Info.code === '1') {
+          this.$message({
+            message: '收款条件保存成功!',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '收款条件保存失败!',
+            type: 'error'
+          })
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   }
 }
@@ -763,6 +885,18 @@ export default {
 }
 .bgGrey{
   background: grey;
+}
+.colorYellow{
+  color: yellow;
+}
+.colorRed{
+  color: red;
+}
+.colorWhite{
+  color: white;
+}
+.fontWeight{
+  font-weight: bold;
 }
 
 </style>
