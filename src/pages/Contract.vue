@@ -1,6 +1,6 @@
 <template>
   <div class="Contract">
-    <h2 class="MarginT_20 MarginB_20">合同（应收）</h2>
+    <h2 class="MarginT_20 MarginB_20">合同（应付）</h2>
     <el-row class="MarginT_20">
       <el-form ref="formContract" :model="formContract" label-width="90px" size="small" style="padding-right: 20px;">
         <el-col :span="6">
@@ -82,7 +82,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="所属公司" prop="affiliatedCompany">
             <el-select v-model="formContract.affiliatedCompany" placeholder="请选择" style="width: 100%;">
               <el-option
@@ -105,7 +105,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-form>
     </el-row>
     <el-row class="listColumnTit">

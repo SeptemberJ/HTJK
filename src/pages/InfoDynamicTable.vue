@@ -227,7 +227,7 @@
                   <el-col :span="2">{{item.fpercent}}</el-col>
                   <el-col :span="4">{{item.fyingshou}}</el-col>
                   <el-col :span="4">{{item.fshiji}}</el-col>
-                  <el-col :span="4">{{(item.fyingshou - item.fshiji).toFixed(2)}}</el-col>
+                  <el-col :span="4">{{item.fyingshou - item.fshiji}}</el-col>
                   <el-col :span="6">
                     <el-date-picker style="width: 65%;" size="mini" @change="(value) => saveDate(value, item.FName)"
                       v-model="item.fdate"
@@ -270,9 +270,14 @@
         <div class="DotItemwrap">
           <div class="TextItem">
             <!-- <p :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{item.node.txt}}</p> -->
-            <p>{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' || item.tit == '质保结束' || item.tit == '合同到期' ? formBasic.swry : formBasic.xmjl}}</p>
-            <p v-if="item.tit == '设备到现场'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{wsjeSB >= 0 ? wsjeSB : ''}}</p>
-            <p v-if="item.status == 3 && item.tit == '质保结束'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{formBasic.wsje >= 0 ? formBasic.wsje : ''}}</p>
+            <p style="height: 23px;">{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' || item.tit == '质保结束' || item.tit == '合同到期' ? formBasic.swry : formBasic.xmjl}}</p>
+            <!-- 未收金额显示 -->
+            <p>
+              <span v-if="item.tit != '质保结束'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{ item.node.color == 0 ? '' : item.money}}</span>
+              <span v-else>{{item.status == 3 ? item.money: ''}}</span>
+            </p>
+            <!-- <p v-if="item.tit == '设备到现场'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{wsjeSB >= 0 ? wsjeSB : ''}}</p>
+            <p v-if="item.status == 3 && item.tit == '质保结束'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{formBasic.wsje >= 0 ? formBasic.wsje : ''}}</p> -->
           </div>
           <div :class="{'DotItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3 || item.status == 1 && idx < curLuiChengIdx}"></div>
           <div class="TextItem">
@@ -504,29 +509,27 @@ export default {
           }
           if (Info['是否维保项目'] === '否') {
             this.steps = [
-              {status: Info['放号'], date: '', tit: '放号', author: Author['放号'], node: {txt: '--', color: 2}},
-              {status: Info['合同签订'], date: '', tit: '合同签订', author: Author['合同签订'], node: {txt: '--', color: 2}},
-              {status: Info['进场施工'], date: '', tit: '进场施工', author: Author['进场施工'], node: {txt: '预付款', color: Info['f6']}},
-              {status: Info['设备到现场'] === 2 && (!hasShouKuang || Number(this.wsjeSB) > 0) ? 3 : Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场'], node: {txt: '货到付款', color: Info['f7']}},
-              // {status: Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场']},
-              {status: Info['隐蔽验收'], date: '', tit: '隐蔽验收', author: Author['隐蔽验收'], node: {txt: '隐蔽验收', color: Info['f8']}},
-              {status: Info['安装调试'], date: '', tit: '安装调试', author: Author['安装调试'], node: {txt: '--', color: 2}},
-              {status: Info['竣工验收'], date: '', tit: '竣工验收', author: Author['竣工验收'], node: {txt: '合同项目验收', color: Info['f9']}},
-              {status: Info['审价结算'], date: '', tit: '审价结算', author: Author['审价结算'], node: {txt: '审计审价', color: Info['f10']}},
-              {status: Info['项目移交'], date: '', tit: '项目移交', author: Author['项目移交'], node: {txt: '--', color: 2}},
-              {status: Info['质保开始'], date: '', tit: '质保开始', author: Author['质保开始'], node: {txt: '--', color: 2}},
-              {status: curTimeStamp > zbTimeStamp ? (Info['收款率'] === '100.00%' ? 2 : 3) : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束'], node: {txt: '质保金', color: Info['f11']}}
-              // {status: curTimeStamp > zbTimeStamp && Info['收款率'] === '100.00%' ? 3 : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束']}
+              {status: Info['放号'], date: '', tit: '放号', author: Author['放号'], money: '', node: {txt: '--', color: 2}},
+              {status: Info['合同签订'], date: '', tit: '合同签订', author: Author['合同签订'], money: '', node: {txt: '--', color: 2}},
+              {status: Info['进场施工'], date: '', tit: '进场施工', author: Author['进场施工'], money: ReceiptRate[0].fyingshou - ReceiptRate[0].fshiji, node: {txt: '预付款', color: Info['f6']}},
+              {status: Info['设备到现场'] === 2 && (!hasShouKuang || Number(this.wsjeSB) > 0) ? 3 : Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场'], money: ReceiptRate[2].fyingshou - ReceiptRate[2].fshiji, node: {txt: '货到付款', color: Info['f7']}},
+              {status: Info['隐蔽验收'], date: '', tit: '隐蔽验收', author: Author['隐蔽验收'], money: ReceiptRate[3].fyingshou - ReceiptRate[3].fshiji, node: {txt: '隐蔽验收', color: Info['f8']}},
+              {status: Info['安装调试'], date: '', tit: '安装调试', author: Author['安装调试'], money: '', node: {txt: '--', color: 2}},
+              {status: Info['竣工验收'], date: '', tit: '竣工验收', author: Author['竣工验收'], money: ReceiptRate[5].fyingshou - ReceiptRate[5].fshiji, node: {txt: '合同项目验收', color: Info['f9']}},
+              {status: Info['审价结算'], date: '', tit: '审价结算', author: Author['审价结算'], money: ReceiptRate[6].fyingshou - ReceiptRate[6].fshiji, node: {txt: '审计审价', color: Info['f10']}},
+              {status: Info['项目移交'], date: '', tit: '项目移交', author: Author['项目移交'], money: '', node: {txt: '--', color: 2}},
+              {status: Info['质保开始'], date: '', tit: '质保开始', author: Author['质保开始'], money: '', node: {txt: '--', color: 2}},
+              {status: curTimeStamp > zbTimeStamp ? (Info['收款率'] === '100.00%' ? 2 : 3) : Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束'], money: ReceiptRate[7].fyingshou - ReceiptRate[7].fshiji, node: {txt: '质保金', color: Info['f11']}}
             ]
           } else {
             this.steps = [
-              {status: Info['放号'], date: '', tit: '放号', author: true, node: {txt: '--', color: 2}},
-              {status: Info['合同签订'], date: '', tit: '合同签订', author: true, node: {txt: '--', color: 2}},
-              {status: Info['第一季度'], date: '', tit: '第一季度', author: true, node: {txt: '第一季度', color: Info['f1']}},
-              {status: Info['第二季度'], date: '', tit: '第二季度', author: true, node: {txt: '第二季度', color: Info['f2']}},
-              {status: Info['第三季度'], date: '', tit: '第三季度', author: true, node: {txt: '第三季度', color: Info['f3']}},
-              {status: Info['第四季度'], date: '', tit: '第四季度', author: true, node: {txt: '第四季度', color: Info['f4']}},
-              {status: Info['合同到期'], date: '', tit: '合同到期', author: true, node: {txt: '合同到期', color: Info['f5']}}
+              {status: Info['放号'], date: '', tit: '放号', author: true, money: '', node: {txt: '--', color: 2}},
+              {status: Info['合同签订'], date: '', tit: '合同签订', author: true, money: '', node: {txt: '--', color: 2}},
+              {status: Info['第一季度'], date: '', tit: '第一季度', author: true, money: ReceiptRate[0].fyingshou - ReceiptRate[0].fshiji, node: {txt: '第一季度', color: Info['f1']}},
+              {status: Info['第二季度'], date: '', tit: '第二季度', author: true, money: ReceiptRate[1].fyingshou - ReceiptRate[1].fshiji, node: {txt: '第二季度', color: Info['f2']}},
+              {status: Info['第三季度'], date: '', tit: '第三季度', author: true, money: ReceiptRate[2].fyingshou - ReceiptRate[2].fshiji, node: {txt: '第三季度', color: Info['f3']}},
+              {status: Info['第四季度'], date: '', tit: '第四季度', author: true, money: ReceiptRate[3].fyingshou - ReceiptRate[3].fshiji, node: {txt: '第四季度', color: Info['f4']}},
+              {status: Info['合同到期'], date: '', tit: '合同到期', author: true, money: ReceiptRate[4].fyingshou - ReceiptRate[4].fshiji, node: {txt: '合同到期', color: Info['f5']}}
             ]
           }
           // 判断当前流程
@@ -552,13 +555,6 @@ export default {
               }
             }
           }
-          // for (let i = 0; i < 11; i++) {
-          //   if (Info[this.liuCheng[i]] === 1) {
-          //     this.curLuiCheng = this.liuCheng[i] === '放号' ? '--' : this.liuCheng[i]
-          //     this.curLuiChengIdx = i
-          //     break
-          //   }
-          // }
           // 设备到现场的未收金额
           if (ReceiptRate[1]) {
             this.wsjeSB = (ReceiptRate[1].fyingshou - ReceiptRate[1].fshiji).toFixed(2)
