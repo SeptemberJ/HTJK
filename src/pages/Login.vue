@@ -106,6 +106,7 @@ export default {
             setCookie('ZT_14a808c40bba58c2c', cookieStr, 6)
             this.updateUserInfo({fempid: Info.fempid})
             this.$router.push({name: 'FilterTable'})
+            // this.$router.push({name: 'Index'})
             this.btLoading = false
             break
           default:

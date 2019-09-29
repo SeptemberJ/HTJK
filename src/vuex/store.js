@@ -14,17 +14,18 @@ const state = {
   useName: 'liubai',
   userInfo: null,
   pathName: null,
+  siderIdx: '1',
   curContractNo: '',
   cuXMMC: '',
   curDB: null,
   resultDataOrigin: [],
   formFilter: {
-    affiliatedCompany: '',
+    affiliatedCompany: '全部',
     signDepartment: '全部',
     contractSumS: '',
     contractSumE: '',
-    industryType: '',
-    projectType: '',
+    industryType: '全部',
+    projectType: '全部',
     warnTip: '',
     subcontractItem: '',
     receivablesContion: '',
@@ -47,7 +48,8 @@ const state = {
     xmmc: 'B17070221ZG1804杨浦区311街坊C3地块及北区综合项目二期改造（复旦管院）', // B17070221ZG1804杨浦区311街坊C3地块及北区综合项目二期改造（复旦管院）
     customer: '',
     projectNumber: ''
-  }
+  },
+  contractId: null
 }
 
 const actions = {
@@ -71,6 +73,12 @@ const actions = {
   },
   changePath ({commit, state}, PATH) {
     commit('setPath', PATH)
+  },
+  updateContractId ({commit, state}, ContractId) {
+    commit('setContractId', ContractId)
+  },
+  changeSiderIdx ({commit, state}, IDX) {
+    commit('setSiderIdx', IDX)
   }
 }
 
@@ -95,6 +103,12 @@ const mutations = {
   },
   setPath (state, PATH) {
     state.pathName = PATH
+  },
+  setContractId (state, ContractId) {
+    state.contractId = ContractId
+  },
+  setSiderIdx (state, IDX) {
+    state.siderIdx = IDX
   }
 }
 

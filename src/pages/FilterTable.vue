@@ -521,7 +521,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { Loading } from 'element-ui'
+// import { Loading } from 'element-ui'
 import $ from 'jquery'
 export default {
   name: 'FilterTable',
@@ -543,6 +543,7 @@ export default {
       ],
       signDepartmentList: [],
       industryTypeOption: [
+        {label: '全部', value: '全部'},
         {label: '房产', value: '房产'},
         {label: '商业', value: '商业'},
         {label: '医疗', value: '医疗'},
@@ -551,13 +552,18 @@ export default {
         {label: '个人', value: '个人'}
       ],
       projectTypeOption: [
-        {label: '保养', value: '保养'},
-        {label: '改造', value: '改造'},
-        {label: '维修', value: '维修'},
-        {label: '板胶', value: '板胶'},
-        {label: '供货', value: '供货'},
-        {label: '五金', value: '五金'},
-        {label: '零售', value: '零售'}
+        {label: '全部', value: '全部'},
+        {label: 'VRV项目', value: 'VRV项目'},
+        {label: '水机项目', value: '水机项目'},
+        {label: '净水项目', value: '净水项目'},
+        {label: '改造项目', value: '改造项目'},
+        {label: '大型维修项目', value: '大型维修项目'},
+        {label: '维修项目', value: '维修项目'},
+        {label: '保养项目', value: '保养项目'},
+        {label: '供货项目', value: '供货项目'},
+        {label: '驻场项目', value: '驻场项目'},
+        {label: '板胶项目', value: '板胶项目'},
+        {label: '外协', value: '外协'}
       ],
       warnTipOption: [
         {label: '全部', value: '全部'},
@@ -636,7 +642,7 @@ export default {
   },
   created () {
     setTimeout(() => {
-      let height = document.documentElement.clientHeight
+      let height = document.documentElement.clientHeight - 42
       document.getElementById('FilterBlock').style.height = height + 'px'
       this.tableHieght = height
     }, 0)
@@ -713,12 +719,13 @@ export default {
     },
     // 精确查询
     search () {
-      let loadingInstance = Loading.service({
-        lock: true,
-        text: '加载中',
-        spinner: 'el-icon-loading'
-      })
-      this.getTotal()
+      // let loadingInstance = Loading.service({
+      //   lock: true,
+      //   text: '加载中',
+      //   spinner: 'el-icon-loading'
+      // })
+      this.loading = true
+      // this.getTotal()
       let contractSumS = "''"
       let contractSumE = "''"
       if (this.formFilter.contractSumS) {
@@ -731,7 +738,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>exec [Z_ContractList] '" + this.formFilter.xmmc + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + Number((this.curPage - 1) * this.pageSize + 1) + ',' + this.pageSize * this.curPage + ',' + this.userInfo.fempid + '</FSQL>'
+      tmpData += "<FSQL>exec [Z_ContractList] '" + this.formFilter.xmmc + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ",'" + this.formFilter.industryType + "','" + this.formFilter.projectType + "','" + this.formFilter.affiliatedCompany + "'," + Number((this.curPage - 1) * this.pageSize + 1) + ',' + this.pageSize * this.curPage + ',' + this.userInfo.fempid + '</FSQL>'
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -743,18 +750,26 @@ export default {
         // 提取数据
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
-        console.log('filterInfo---', JSON.parse(HtmlStr))
-        this.resultData = (JSON.parse(HtmlStr)).map(item => {
+        let Info = JSON.parse(HtmlStr)
+        if (Info.length > 1) {
+          this.sum = Info[0].fcount
+        } else {
+          this.sum = 0
+        }
+        console.log('filterInfo---', Info)
+        this.resultData = Info.map(item => {
           item['开工日期'] = item['开工日期'] ? item['开工日期'].slice(0, 10) : ''
           item['完工日期'] = item['完工日期'] ? item['完工日期'].slice(0, 10) : ''
           item['费用金额2'] = item['费用金额'] ? item['费用金额'].toFixed(2) : ''
           item['成本2'] = item['成本'] ? item['成本'].toFixed(2) : ''
           return item
         })
-        loadingInstance.close()
+        this.loading = false
+        // loadingInstance.close()
       }).catch((error) => {
         console.log(error)
-        loadingInstance.close()
+        this.loading = false
+        // loadingInstance.close()
       })
     },
     // 分页总数
@@ -771,7 +786,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL>exec [Z_ContractList_count] '" + this.formFilter.xmmc + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ',' + this.userInfo.fempid + '</FSQL>'
+      tmpData += "<FSQL>exec [Z_ContractList_count] '" + this.formFilter.xmmc + "','" + this.formFilter.signDepartment + "','" + this.formFilter.customer + "','" + this.formFilter.projectNumber + "'," + contractSumS + ',' + contractSumE + ',' + this.formFilter.signYear + ",'" + this.formFilter.industryType + "','" + this.formFilter.projectType + "'," + this.userInfo.fempid + '</FSQL>'
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -810,7 +825,10 @@ export default {
         // 提取数据
         let Result = xmlDoc.getElementsByTagName('JA_LISTResponse')[0].getElementsByTagName('JA_LISTResult')[0]
         let HtmlStr = $(Result).html()
-        // let Info = JSON.parse(HtmlStr)
+        let Info = JSON.parse(HtmlStr)
+        if (Info.length > 1) {
+          this.sum = Info[0].fcount
+        }
         // Info.map((item, idx) => {
         //   let obj = {
         //     contractNo: item['合同号'],
@@ -822,7 +840,7 @@ export default {
         //     this.loading = false
         //   }
         // })
-        this.updateResultData(JSON.parse(HtmlStr))
+        this.updateResultData(Info)
         // this.resultData = JSON.parse(HtmlStr)
         // this.loading = false
       }).catch((error) => {
@@ -864,10 +882,10 @@ export default {
 
 <style lang='less' scoped>
 .FilterTable{
-  padding: 0 5px;
+  padding: 0;
   .FilterBlock{
     padding: 10px;
-    border: 1px solid #7bbfea;
+    // border: 1px solid #7bbfea;
     background: aliceblue;
     overflow-y: scroll;
   }

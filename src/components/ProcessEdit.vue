@@ -13,7 +13,7 @@
           <div v-else>
             <span class="secondTit">销售合同</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['合同签订']['销售合同']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '销售合同')"></i>
@@ -27,7 +27,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['进场施工']['开工报告'].length > 0">开工报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['进场施工']['开工报告']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '开工报告')"></i>
@@ -35,7 +35,7 @@
             </p>
             <span class="secondTit" v-if="fileList['进场施工']['工程交底会议'].length > 0">工程交底会议</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['进场施工']['工程交底会议']" :key="'工程交底会议' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工程交底会议')"></i>
@@ -43,7 +43,7 @@
             </p>
             <span class="secondTit" v-if="fileList['进场施工']['项目流转单'].length > 0">项目流转单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['进场施工']['项目流转单']" :key="'项目流转单' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '项目流转单')"></i>
@@ -57,7 +57,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['设备到现场']['设备签收单'].length > 0">设备签收单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['设备到现场']['设备签收单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -72,7 +72,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['隐蔽验收']['试气报告'].length > 0">试气报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['隐蔽验收']['试气报告']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -81,7 +81,7 @@
             </p>
             <span class="secondTit" v-if="fileList['隐蔽验收']['试压报告'].length > 0">试压报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['隐蔽验收']['试压报告']" :key="'试压报告' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -90,7 +90,7 @@
             </p>
             <span class="secondTit" v-if="fileList['隐蔽验收']['灌水试验报告'].length > 0">灌水试验报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['隐蔽验收']['灌水试验报告']" :key="'灌水试验报告' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -105,7 +105,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['安装调试']['调试验收单'].length > 0">调试验收单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['安装调试']['调试验收单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -114,7 +114,7 @@
             </p>
             <span class="secondTit" v-if="fileList['安装调试']['设备移交单'].length > 0">设备移交单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['安装调试']['设备移交单']" :key="'设备移交单' + idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 <span style="padding-right: 10px;">{{file.fpercent}}</span>
                 {{file.fileDate}}
@@ -129,7 +129,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['竣工验收']['竣工图'].length > 0">竣工图</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['竣工验收']['竣工图']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '竣工图')"></i>
@@ -143,7 +143,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['审价结算']['审计报告'].length > 0">审计报告</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['审价结算']['审计报告']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '审计报告')"></i>
@@ -157,7 +157,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['项目移交']['同竣工验收资料'].length > 0">同竣工验收资料</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['项目移交']['同竣工验收资料']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '同竣工验收资料')"></i>
@@ -171,7 +171,7 @@
           <div v-else>
             <span class="secondTit" v-if="fileList['质保开始']['调试验收单'].length > 0">调试验收单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['质保开始']['调试验收单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '调试验收单')"></i>
@@ -185,7 +185,7 @@
           <div v-else>
             <!-- <span class="secondTit" v-if="fileList['质保结束']['文件'].length > 0">文件</span> -->
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['质保结束']['文件']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '文件')"></i>
@@ -199,7 +199,7 @@
           <div v-else>
             <span class="secondTit">工作单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['第一季度']['工作单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
@@ -213,7 +213,7 @@
           <div v-else>
             <span class="secondTit">工作单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['第二季度']['工作单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
@@ -227,7 +227,7 @@
           <div v-else>
             <span class="secondTit">工作单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['第三季度']['工作单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
@@ -241,7 +241,7 @@
           <div v-else>
             <span class="secondTit">工作单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['第四季度']['工作单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
@@ -255,7 +255,7 @@
           <div v-else>
             <span class="secondTit">工作单</span>
             <p class="TextAlignL MarginB_10 PaddingL_28" v-for="(file, idx) in fileList['合同到期']['工作单']" :key="idx">
-              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']">{{file.fileName}}</a></span>
+              <span class="TextIndent">{{idx + 1}}.  <a :href="file['文件路径']" target="_blank">{{file.fileName}}</a></span>
               <span style="float:right;">
                 {{file.fileDate}}
                 <i class="el-icon-delete CursorPointer" style="margin-left: 20px;" @click="deleteFile(file, '工作单')"></i>
@@ -265,7 +265,7 @@
         </section>
         <!-- 新增文件 -->
         <div v-if="processStatus != 2">
-          <p class="TextAlignL MarginT_20 MarginB_20"><b>上传新文件：（ 文件格式需为doc/pdf ）</b></p>
+          <p class="TextAlignL MarginT_20 MarginB_20"><b>上传新文件：</b></p>
           <!-- 合同签订 -->
           <section v-if="processName == '合同签订'">
             <el-form :model="formHtqd" :rules="rulesFile" ref="formHtqd" label-width="100px" label-position="left">
@@ -278,7 +278,6 @@
                           ref="upload_formHtqd"
                           v-model="formHtqd.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formHtqd"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formHtqd')}"
                           :before-upload="beforeUpload"
@@ -313,7 +312,6 @@
                         ref="upload_formJcsg_kgbg"
                         v-model="formJcsg_kgbg.fileName"
                         :action="uploadAdr"
-                        accept=".pdf,.doc,.PDF"
                         :file-list="curFileList_formJcsg_kgbg"
                         :on-change="(file, fileList)=>{changeFile(file, fileList, 'formJcsg_kgbg')}"
                         :before-upload="beforeUpload"
@@ -345,7 +343,6 @@
                         ref="upload_formJcsg_gcjdhy"
                         v-model="formJcsg_gcjdhy.fileName"
                         :action="uploadAdr"
-                        accept=".pdf,.doc,.PDF"
                         :file-list="curFileList_formJcsg_gcjdhy"
                         :on-change="(file, fileList)=>{changeFile(file, fileList, 'formJcsg_gcjdhy')}"
                         :before-upload="beforeUpload"
@@ -377,7 +374,6 @@
                         ref="upload_formJcsg_xmlzd"
                         v-model="formJcsg_xmlzd.fileName"
                         :action="uploadAdr"
-                        accept=".pdf,.doc,.PDF"
                         :file-list="curFileList_formJcsg_xmlzd"
                         :on-change="(file, fileList)=>{changeFile(file, fileList, 'formJcsg_xmlzd')}"
                         :before-upload="beforeUpload"
@@ -412,7 +408,6 @@
                           ref="upload_formSbdxc"
                           v-model="formSbdxc.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formSbdxc"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formSbdxc')}"
                           :before-upload="beforeUpload"
@@ -454,7 +449,6 @@
                         ref="upload_formYbys_sqbg"
                         v-model="formYbys_sqbg.fileName"
                         :action="uploadAdr"
-                        accept=".pdf,.doc,.PDF"
                         :file-list="curFileList_formYbys_sqbg"
                         :on-change="(file, fileList)=>{changeFile(file, fileList, 'formYbys_sqbg')}"
                         :before-upload="beforeUpload"
@@ -493,7 +487,6 @@
                         ref="upload_formYbys_sybg"
                         v-model="formYbys_sybg.fileName"
                         :action="uploadAdr"
-                        accept=".pdf,.doc,.PDF"
                         :file-list="curFileList_formYbys_sybg"
                         :on-change="(file, fileList)=>{changeFile(file, fileList, 'formYbys_sybg')}"
                         :before-upload="beforeUpload"
@@ -532,7 +525,6 @@
                         ref="upload_formYbys_gssybg"
                         v-model="formYbys_gssybg.fileName"
                         :action="uploadAdr"
-                        accept=".pdf,.doc,.PDF"
                         :file-list="curFileList_formYbys_gssybg"
                         :on-change="(file, fileList)=>{changeFile(file, fileList, 'formYbys_gssybg')}"
                         :before-upload="beforeUpload"
@@ -574,7 +566,6 @@
                         ref="upload_formAzts_tsysd"
                         v-model="formAzts_tsysd.fileName"
                         :action="uploadAdr"
-                        accept=".pdf,.doc,.PDF"
                         :file-list="curFileList_formAzts_tsysd"
                         :on-change="(file, fileList)=>{changeFile(file, fileList, 'formAzts_tsysd')}"
                         :before-upload="beforeUpload"
@@ -613,7 +604,6 @@
                         ref="upload_formAzts_sbyjd"
                         v-model="formAzts_sbyjd.fileName"
                         :action="uploadAdr"
-                        accept=".pdf,.doc,.PDF"
                         :file-list="curFileList_formAzts_sbyjd"
                         :on-change="(file, fileList)=>{changeFile(file, fileList, 'formAzts_sbyjd')}"
                         :before-upload="beforeUpload"
@@ -655,7 +645,6 @@
                           ref="upload_formJgys"
                           v-model="formJgys.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formJgys"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formJgys')}"
                           :before-upload="beforeUpload"
@@ -690,7 +679,6 @@
                           ref="upload_formSjjs"
                           v-model="formSjjs.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formSjjs"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formSjjs')}"
                           :before-upload="beforeUpload"
@@ -725,7 +713,6 @@
                           ref="upload_formXmyj"
                           v-model="formXmyj.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formXmyj"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formXmyj')}"
                           :before-upload="beforeUpload"
@@ -760,7 +747,6 @@
                           ref="upload_formZbks"
                           v-model="formZbks.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formZbks"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formZbks')}"
                           :before-upload="beforeUpload"
@@ -795,7 +781,6 @@
                           ref="upload_formZbjs"
                           v-model="formZbjs.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formZbjs"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formZbjs')}"
                           :before-upload="beforeUpload"
@@ -830,7 +815,6 @@
                           ref="upload_formDyjd"
                           v-model="formDyjd.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formDyjd"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formDyjd')}"
                           :before-upload="beforeUpload"
@@ -865,7 +849,6 @@
                           ref="upload_formDejd"
                           v-model="formDejd.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formDejd"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formDejd')}"
                           :before-upload="beforeUpload"
@@ -900,7 +883,6 @@
                           ref="upload_formDsjd"
                           v-model="formDsjd.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formDsjd"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formDsjd')}"
                           :before-upload="beforeUpload"
@@ -935,7 +917,6 @@
                           ref="upload_formDfjd"
                           v-model="formDfjd.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formDfjd"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formDfjd')}"
                           :before-upload="beforeUpload"
@@ -970,7 +951,6 @@
                           ref="upload_formHtdq"
                           v-model="formHtdq.fileName"
                           :action="uploadAdr"
-                          accept=".pdf,.doc,.PDF"
                           :file-list="curFileList_formHtdq"
                           :on-change="(file, fileList)=>{changeFile(file, fileList, 'formHtdq')}"
                           :before-upload="beforeUpload"
