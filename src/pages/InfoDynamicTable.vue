@@ -206,32 +206,32 @@
               </el-row>
             </div> -->
             <el-row>
-              <el-col :span="20">
+              <el-col :span="19">
                 <el-row style="margin-bottom: 10px; font-weight: bold;">
                   <el-col :span="4">项目</el-col>
-                  <el-col :span="2">实际比例</el-col>
-                  <el-col :span="4">应收金额</el-col>
-                  <el-col :span="4">实际金额</el-col>
-                  <el-col :span="4">未收金额</el-col>
-                  <el-col :span="6">收款时间</el-col>
+                  <el-col :span="2" class="TextAlignR">实际比例</el-col>
+                  <el-col :span="4" class="TextAlignR">应收金额</el-col>
+                  <el-col :span="4" class="TextAlignR">实际金额</el-col>
+                  <el-col :span="4" class="TextAlignR">未收金额</el-col>
+                  <el-col :span="6" class="TextAlignR">收款时间</el-col>
                 </el-row>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="5" class="TextAlignR">
                 <el-row style="margin-bottom: 10px; font-weight: bold;">
                   <el-col>收款条件</el-col>
                 </el-row>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="20">
+              <el-col :span="19">
                 <div v-for="(item, idx) in receiptRateInfo" :key="idx" class="text item MarginB_10">
                   <el-row>
                     <el-col :span="4">{{idx + 1}}. {{item.FName}}</el-col>
-                    <el-col :span="2">{{item.fpercent}}</el-col>
-                    <el-col :span="4">{{item.fyingshou}}</el-col>
-                    <el-col :span="4">{{item.fshiji}}</el-col>
-                    <el-col :span="4">{{item.fyingshou - item.fshiji}}</el-col>
-                    <el-col :span="6">
+                    <el-col :span="2" class="TextAlignR">{{item.fpercent}}</el-col>
+                    <el-col :span="4" class="TextAlignR">{{(item.fyingshou).toFixed(2)}}</el-col>
+                    <el-col :span="4" class="TextAlignR">{{(item.fshiji).toFixed(2)}}</el-col>
+                    <el-col :span="4" class="TextAlignR">{{(item.fyingshou - item.fshiji).toFixed(2)}}</el-col>
+                    <el-col :span="6" class="TextAlignR">
                       <el-date-picker style="width: 65%;" size="mini" @change="(value) => saveDate(value, item.FName, item.fyingshou - item.fshiji)"
                         v-model="item.fdate"
                         type="date"
@@ -243,8 +243,8 @@
                   </el-row>
                 </div>
               </el-col>
-              <el-col :span="4">
-                <el-input type="textarea" :rows="4" placeholder="请输入收款条件" v-model="receiptRateInfo[0].Fnote"></el-input>
+              <el-col :span="5" class="TextAlignR">
+                <el-input style="width: 90%;" type="textarea" :rows="4" placeholder="请输入收款条件" v-model="receiptRateInfo[0].Fnote"></el-input>
                 <el-button size="mini" type="danger" style="margin-top: 5px;" @click="saveCollectionCondition(receiptRateInfo[0].Fnote)">保存</el-button>
               </el-col>
             </el-row>
@@ -275,13 +275,18 @@
                 <p style="height: 23px;">{{item.tit == '合同签订' || item.tit == '设备到现场' || item.tit == '审价结算' || item.tit == '质保结束' || item.tit == '合同到期' ? formBasic.swry : formBasic.xmjl}}</p>
                 <!-- 未收金额显示 -->
                 <p>
-                  <span v-if="item.tit != '质保结束'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3}">{{ item.node.color == 0 ? '' : item.money}}</span>
-                  <span v-else>{{item.status == 3 ? item.money: ''}}</span>
+                  <span v-if="item.tit != '质保结束'" :class="{'colorYellow': item.node.color == 0, 'colorRed fontWeight bigSize': item.dateOver == 1 &&  item.money >= 0, 'colorWhite': item.node.color == 2}">{{ item.node.color == 0 ? '' : item.money}}</span>
+                  <span v-else class="colorRed bigSize fontWeight">{{item.dateOver == 1 &&  item.money >= 0 ? item.money: ''}}</span>
                 </p>
+                <!-- <p>
+                  <span v-if="item.tit != '质保结束'" :class="{'colorYellow': item.node.color == 0, 'colorRed': item.node.color == 3, 'colorWhite': item.node.color == 2, 'fontWeight': item.node.color == 3, 'bigSize': item.node.color == 3}">{{ item.node.color == 0 ? '' : item.money}}</span>
+                  <span v-else class="colorRed bigSize fontWeight">{{item.status == 3 ? item.money: ''}}</span>
+                </p> -->
               </div>
               <div :class="{'DotItem':true, 'bgGrey': item.status == 0, 'bgYellow': item.status == 1 && curLuiCheng != item.tit, 'bgBlue': item.status == 1 && curLuiCheng == item.tit, 'bgGreen': item.status == 2, 'bgRed': item.status == 3 || item.status == 1 && idx < curLuiChengIdx}"></div>
               <div class="TextItem">
                 <p>{{item.tit}}</p>
+                <!-- --{{item.dateOver}}-- {{item.node.color}} --{{item.money}} -->
               </div>
             </div>
           </div>
@@ -304,6 +309,7 @@ import { mapState } from 'vuex'
 // import { Loading } from 'element-ui'
 import $ from 'jquery'
 import ProcessEdit from '../components/ProcessEdit'
+import {compareNYR} from '../util/utils'
 export default {
   name: 'InfoDynamicTable',
   data () {
@@ -484,29 +490,30 @@ export default {
         }
         if (Info['是否维保项目'] === '否') {
           this.steps = [
-            {status: Info['放号'], date: '', tit: '放号', author: Author['放号'], money: '', node: {txt: '--', color: 2}},
-            {status: Info['合同签订'], date: '', tit: '合同签订', author: Author['合同签订'], money: '', node: {txt: '--', color: 2}},
-            {status: Info['进场施工'], date: '', tit: '进场施工', author: Author['进场施工'], money: ReceiptRate[0].fyingshou - ReceiptRate[0].fshiji, node: {txt: '预付款', color: Info['f6']}},
-            {status: Info['设备到现场'], date: '', tit: '设备到现场', author: Author['设备到现场'], money: ReceiptRate[2].fyingshou - ReceiptRate[2].fshiji, node: {txt: '货到付款', color: Info['f7']}},
-            {status: Info['隐蔽验收'], date: '', tit: '隐蔽验收', author: Author['隐蔽验收'], money: ReceiptRate[3].fyingshou - ReceiptRate[3].fshiji, node: {txt: '隐蔽验收', color: Info['f8']}},
-            {status: Info['安装调试'], date: '', tit: '安装调试', author: Author['安装调试'], money: '', node: {txt: '--', color: 2}},
-            {status: Info['竣工验收'], date: '', tit: '竣工验收', author: Author['竣工验收'], money: ReceiptRate[5].fyingshou - ReceiptRate[5].fshiji, node: {txt: '合同项目验收', color: Info['f9']}},
-            {status: Info['审价结算'], date: '', tit: '审价结算', author: Author['审价结算'], money: ReceiptRate[6].fyingshou - ReceiptRate[6].fshiji, node: {txt: '审计审价', color: Info['f10']}},
-            {status: Info['项目移交'], date: '', tit: '项目移交', author: Author['项目移交'], money: '', node: {txt: '--', color: 2}},
-            {status: Info['质保开始'], date: '', tit: '质保开始', author: Author['质保开始'], money: '', node: {txt: '--', color: 2}},
-            {status: Info['质保结束'], date: '', tit: '质保结束', author: Author['质保结束'], money: ReceiptRate[7].fyingshou - ReceiptRate[7].fshiji, node: {txt: '质保金', color: Info['f11']}}
+            {status: Info['放号'], dateOver: '', tit: '放号', author: Author['放号'], money: '', node: {txt: '--', color: 2}},
+            {status: Info['合同签订'], dateOver: '', tit: '合同签订', author: Author['合同签订'], money: '', node: {txt: '--', color: 2}},
+            {status: Info['进场施工'], dateOver: compareNYR(ReceiptRate[0].fdate), tit: '进场施工', author: Author['进场施工'], money: ReceiptRate[0].fyingshou - ReceiptRate[0].fshiji, node: {txt: '预付款', color: Info['f6']}},
+            {status: Info['设备到现场'], dateOver: compareNYR(ReceiptRate[2].fdate), tit: '设备到现场', author: Author['设备到现场'], money: ReceiptRate[2].fyingshou - ReceiptRate[2].fshiji, node: {txt: '货到付款', color: Info['f7']}},
+            {status: Info['隐蔽验收'], dateOver: compareNYR(ReceiptRate[3].fdate), tit: '隐蔽验收', author: Author['隐蔽验收'], money: ReceiptRate[3].fyingshou - ReceiptRate[3].fshiji, node: {txt: '隐蔽验收', color: Info['f8']}},
+            {status: Info['安装调试'], dateOver: '', tit: '安装调试', author: Author['安装调试'], money: '', node: {txt: '--', color: 2}},
+            {status: Info['竣工验收'], dateOver: compareNYR(ReceiptRate[5].fdate), tit: '竣工验收', author: Author['竣工验收'], money: ReceiptRate[5].fyingshou - ReceiptRate[5].fshiji, node: {txt: '合同项目验收', color: Info['f9']}},
+            {status: Info['审价结算'], dateOver: compareNYR(ReceiptRate[6].fdate), tit: '审价结算', author: Author['审价结算'], money: ReceiptRate[6].fyingshou - ReceiptRate[6].fshiji, node: {txt: '审计审价', color: Info['f10']}},
+            {status: Info['项目移交'], dateOver: '', tit: '项目移交', author: Author['项目移交'], money: '', node: {txt: '--', color: 2}},
+            {status: Info['质保开始'], dateOver: '', tit: '质保开始', author: Author['质保开始'], money: '', node: {txt: '--', color: 2}},
+            {status: Info['质保结束'], dateOver: compareNYR(ReceiptRate[7].fdate), tit: '质保结束', author: Author['质保结束'], money: ReceiptRate[7].fyingshou - ReceiptRate[7].fshiji, node: {txt: '质保金', color: Info['f11']}}
           ]
         } else {
           this.steps = [
-            {status: Info['放号'], date: '', tit: '放号', author: true, money: '', node: {txt: '--', color: 2}},
-            {status: Info['合同签订'], date: '', tit: '合同签订', author: true, money: '', node: {txt: '--', color: 2}},
-            {status: Info['第一季度'], date: '', tit: '第一季度', author: true, money: ReceiptRate[0].fyingshou - ReceiptRate[0].fshiji, node: {txt: '第一季度', color: Info['f1']}},
-            {status: Info['第二季度'], date: '', tit: '第二季度', author: true, money: ReceiptRate[1].fyingshou - ReceiptRate[1].fshiji, node: {txt: '第二季度', color: Info['f2']}},
-            {status: Info['第三季度'], date: '', tit: '第三季度', author: true, money: ReceiptRate[2].fyingshou - ReceiptRate[2].fshiji, node: {txt: '第三季度', color: Info['f3']}},
-            {status: Info['第四季度'], date: '', tit: '第四季度', author: true, money: ReceiptRate[3].fyingshou - ReceiptRate[3].fshiji, node: {txt: '第四季度', color: Info['f4']}},
-            {status: Info['合同到期'], date: '', tit: '合同到期', author: true, money: ReceiptRate[4].fyingshou - ReceiptRate[4].fshiji, node: {txt: '合同到期', color: Info['f5']}}
+            {status: Info['放号'], dateOver: '', tit: '放号', author: true, money: '', node: {txt: '--', color: 2}},
+            {status: Info['合同签订'], dateOver: '', tit: '合同签订', author: true, money: '', node: {txt: '--', color: 2}},
+            {status: Info['第一季度'], dateOver: compareNYR(ReceiptRate[0].fdate), tit: '第一季度', author: true, money: ReceiptRate[0].fyingshou - ReceiptRate[0].fshiji, node: {txt: '第一季度', color: Info['f1']}},
+            {status: Info['第二季度'], dateOver: compareNYR(ReceiptRate[1].fdate), tit: '第二季度', author: true, money: ReceiptRate[1].fyingshou - ReceiptRate[1].fshiji, node: {txt: '第二季度', color: Info['f2']}},
+            {status: Info['第三季度'], dateOver: compareNYR(ReceiptRate[2].fdate), tit: '第三季度', author: true, money: ReceiptRate[2].fyingshou - ReceiptRate[2].fshiji, node: {txt: '第三季度', color: Info['f3']}},
+            {status: Info['第四季度'], dateOver: compareNYR(ReceiptRate[3].fdate), tit: '第四季度', author: true, money: ReceiptRate[3].fyingshou - ReceiptRate[3].fshiji, node: {txt: '第四季度', color: Info['f4']}},
+            {status: Info['合同到期'], dateOver: compareNYR(ReceiptRate[4].fdate), tit: '合同到期', author: true, money: ReceiptRate[4].fyingshou - ReceiptRate[4].fshiji, node: {txt: '合同到期', color: Info['f5']}}
           ]
         }
+        // console.log('steps', this.steps)
         // 判断当前流程
         let LiuChengList = Info['是否维保项目'] === '否' ? this.liuCheng : this.liuChengSecond
         if (Info['放号'] === 1) {
@@ -719,63 +726,103 @@ export default {
       let timeStampCur = (new Date()).getTime()
       switch (FName) {
         case '设备交货后收款':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[3].node.color = 3
+            this.steps[3].dateOver = 1
+          } else {
+            this.steps[3].node.color = 1
+            this.steps[3].dateOver = 0
           }
           break
         case '隐蔽验收':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[4].node.color = 3
+            this.steps[4].dateOver = 1
+          } else {
+            this.steps[4].node.color = 1
+            this.steps[4].dateOver = 0
           }
           break
         case '合同项目验收后收款':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[6].node.color = 3
+            this.steps[6].dateOver = 1
+          } else {
+            this.steps[6].node.color = 1
+            this.steps[6].dateOver = 0
           }
           break
         case '审计审价':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[7].node.color = 3
+            this.steps[7].dateOver = 1
+          } else {
+            this.steps[7].node.color = 1
+            this.steps[7].dateOver = 0
           }
           break
         case '质保款':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[10].node.color = 3
+            this.steps[10].dateOver = 1
+          } else {
+            this.steps[10].node.color = 1
+            this.steps[10].dateOver = 0
           }
           break
         case '第一季度':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[2].node.color = 3
+            this.steps[2].dateOver = 1
+          } else {
+            this.steps[2].node.color = 1
+            this.steps[2].dateOver = 0
           }
           break
         case '第二季度':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[3].node.color = 3
+            this.steps[3].dateOver = 1
+          } else {
+            this.steps[3].node.color = 1
+            this.steps[3].dateOver = 0
           }
           break
         case '第三季度':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[4].node.color = 3
+            this.steps[4].dateOver = 1
+          } else {
+            this.steps[4].node.color = 1
+            this.steps[4].dateOver = 0
           }
           break
         case '第四季度':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[5].node.color = 3
+            this.steps[5].dateOver = 1
+          } else {
+            this.steps[5].node.color = 1
+            this.steps[5].dateOver = 0
           }
           break
         case '合同到期':
-          if (FAmount > 0 || timeStamp > timeStampCur) {
+          if (FAmount >= 0 && timeStamp < timeStampCur) {
             Result = 3
             this.steps[6].node.color = 3
+            this.steps[6].dateOver = 1
+          } else {
+            this.steps[6].node.color = 1
+            this.steps[6].dateOver = 0
           }
           break
       }
@@ -951,6 +998,9 @@ export default {
 }
 .fontWeight{
   font-weight: bold;
+}
+.bigSize{
+  font-size: 14px;
 }
 
 </style>
