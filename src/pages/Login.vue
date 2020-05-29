@@ -63,7 +63,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'updateUserInfo'
+      'updateUserInfo',
+      'changeSiderIdx'
     ]),
     Login (formName) {
       this.$refs[formName].validate((valid) => {
@@ -105,8 +106,9 @@ export default {
             let cookieStr = CryptoJS.HmacSHA256((this.Form.accountName + this.Form.accountPsd).toString(), '14a808c40bba58c2c')
             setCookie('ZT_14a808c40bba58c2c', cookieStr, 6)
             this.updateUserInfo({fempid: Info.fempid})
-            this.$router.push({name: 'FilterTable'})
-            // this.$router.push({name: 'Index'})
+            this.changeSiderIdx(0)
+            // this.$router.push({name: 'FilterTable'})
+            this.$router.push({name: 'Index'})
             this.btLoading = false
             break
           default:

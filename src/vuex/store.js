@@ -49,7 +49,16 @@ const state = {
     customer: '',
     projectNumber: ''
   },
-  contractId: null
+  // subcontract
+  contractId: null,
+  filterProjectCode: '',
+  filterConstructionTeam: '',
+  filterCompanyName: '',
+  curPage: 1,
+  // budget
+  budgetId: null,
+  filterProjectName: '',
+  curPage_budget: 1
 }
 
 const actions = {
@@ -76,6 +85,9 @@ const actions = {
   },
   updateContractId ({commit, state}, ContractId) {
     commit('setContractId', ContractId)
+  },
+  updateBudgetId ({commit, state}, ContractId) {
+    commit('setBudgetId', ContractId)
   },
   changeSiderIdx ({commit, state}, IDX) {
     commit('setSiderIdx', IDX)
@@ -106,6 +118,9 @@ const mutations = {
   },
   setContractId (state, ContractId) {
     state.contractId = ContractId
+  },
+  setBudgetId (state, ContractId) {
+    state.budgetId = ContractId
   },
   setSiderIdx (state, IDX) {
     state.siderIdx = IDX

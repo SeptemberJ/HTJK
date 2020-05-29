@@ -2,29 +2,17 @@
   <div class="ContractList">
     <el-row style="margin: 20px 0 0 0;">
       <el-form :inline="true" class="demo-form-inline">
-        <el-form-item label="项目编号" size="mini">
-          <el-input v-model="filterProjectCode" size="mini" placeholder="请输入项目编号" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="施工队" size="mini">
-          <el-input v-model="filterConstructionTeam" size="mini" placeholder="请输入施工队" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="公司名称" size="mini">
-          <el-input v-model="filterCompanyName" size="mini" placeholder="请输入公司名称" clearable></el-input>
+        <el-form-item label="项目名称" size="mini">
+          <el-input v-model="filterProjectName" size="mini" placeholder="请输入项目名称" clearable></el-input>
         </el-form-item>
         <el-form-item label="" size="mini">
           <el-button type="primary" size="mini" icon="el-icon-search" @click="getData">搜 索</el-button>
         </el-form-item>
       </el-form>
-      <!-- <el-col :span="6" :offset="8">
-        <el-input v-model="projectCode" size="mini" clearable placeholder="请输入要查询的项目编号"></el-input>
-      </el-col>
-      <el-col :span="3">
-        <el-button type="primary" size="mini" icon="el-icon-search" @click="getData">搜 索</el-button>
-      </el-col> -->
     </el-row>
     <el-row style="margin-bottom: 20px;text-align: right;padding-right: 10px;">
       <el-button type="success" size="mini" icon="el-icon-printer" @click="exportExcel">导 出</el-button>
-      <el-button type="danger" size="mini" icon="el-icon-plus" @click="addContract">新 增</el-button>
+      <el-button type="danger" size="mini" icon="el-icon-plus" @click="addBudget">新 增</el-button>
     </el-row>
     <el-table
       id="FilterBlock"
@@ -39,116 +27,60 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="合同日期"
-        label="合同日期"
-        width="120"
+        prop="公司名称"
+        label="公司名称"
+        width="150"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="合同号"
-        label="合同号"
-        width="120"
+        prop="客户名称"
+        label="客户名称"
+        width="150"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="项目编号"
-        label="项目编号"
-        width="300"
+        prop="编制人"
+        label="编制人"
+        width="150"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="施工队"
-        label="施工队"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="安装费"
-        label="安装金额"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="材料金额"
-        label="材料金额"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="材料结算"
-        label="材料结算"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="价税合计"
-        label="合计"
-        width="100"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="已付金额"
-        label="已付金额"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="剩余应付"
-        label="剩余应付"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="已付比例"
-        label="已付比例"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column>
-      <!-- <el-table-column
-        prop="剩余未付"
-        label="剩余未付"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column> -->
-      <el-table-column
-        prop="合同名称"
-        label="合同名称"
-        width="250"
-        show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column
-        prop="所属公司"
-        label="所属公司"
+        prop="编制日期"
+        label="编制日期"
         width="120"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
         prop="部门"
         label="部门"
-        width="120"
+        width="150"
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="业务员"
-        label="业务员"
-        width="120"
-        show-overflow-tooltip>
-      </el-table-column>
-      <!-- <el-table-column
-        prop="公司名称"
-        label="公司名称"
+        prop="销售员"
+        label="销售员"
         width="150"
         show-overflow-tooltip>
-      </el-table-column> -->
+      </el-table-column>
+      <el-table-column
+        prop="项目名称"
+        label="项目名称"
+        show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column
+        prop="项目类别"
+        label="项目类别"
+        show-overflow-tooltip>
+      </el-table-column>
       <el-table-column
         fixed="right"
         label="操作"
         width="180">
         <template slot-scope="scope">
-          <!-- <el-button type="danger" size="mini" v-if="scope.row['合同号'] != '合计'" @click="del(scope.row.FInterID)">删 除</el-button> -->
-          <el-button v-if="scope.row['审核状态'] == '未审核' && scope.row['合同号'] != '合计'" type="primary" size="mini" @click="examine(scope.row.FInterID, '审核')">审 核</el-button>
-          <el-button v-if="scope.row['审核状态'] == '未审核' && scope.row['合同号'] != '合计'" type="danger" size="mini" @click="del(scope.row.FInterID)">删 除</el-button>
-          <el-button v-if="scope.row['审核状态'] == '已审核' && scope.row['合同号'] != '合计'" type="warning" size="mini" @click="examine(scope.row.FInterID, '反审核')">反审核</el-button>
+          <!-- <el-button type="danger" size="mini" v-if="scope.row['合同号'] != '合计'" @click="del(scope.row.finterid)">删 除</el-button> -->
+          <el-button v-if="scope.row['审核状态'] == '未审核' && scope.row['合同号'] != '合计'" type="primary" size="mini" @click="examine(scope.row.finterid, '审核')">审 核</el-button>
+          <el-button v-if="scope.row['审核状态'] == '未审核' && scope.row['合同号'] != '合计'" type="danger" size="mini" @click="del(scope.row.finterid)">删 除</el-button>
+          <el-button v-if="scope.row['审核状态'] == '已审核' && scope.row['合同号'] != '合计'" type="warning" size="mini" @click="examine(scope.row.finterid, '反审核')">反审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -172,7 +104,6 @@ export default {
       loading: false,
       tableHieght: 0,
       tableData: [],
-      tableDataAll: [],
       // curPage: 1,
       pageSize: 20,
       sum: 0
@@ -182,36 +113,20 @@ export default {
     ...mapState({
       userInfo: state => state.userInfo
     }),
+    filterProjectName: {
+      get: function () {
+        return this.$store.state.filterProjectName
+      },
+      set: function (newValue) {
+        this.$store.state.filterProjectName = newValue
+      }
+    },
     curPage: {
       get: function () {
-        return this.$store.state.curPage
+        return this.$store.state.curPage_budget
       },
       set: function (newValue) {
-        this.$store.state.curPage = newValue
-      }
-    },
-    filterProjectCode: {
-      get: function () {
-        return this.$store.state.filterProjectCode
-      },
-      set: function (newValue) {
-        this.$store.state.filterProjectCode = newValue
-      }
-    },
-    filterConstructionTeam: {
-      get: function () {
-        return this.$store.state.filterConstructionTeam
-      },
-      set: function (newValue) {
-        this.$store.state.filterConstructionTeam = newValue
-      }
-    },
-    filterCompanyName: {
-      get: function () {
-        return this.$store.state.filterCompanyName
-      },
-      set: function (newValue) {
-        this.$store.state.filterCompanyName = newValue
+        this.$store.state.curPage_budget = newValue
       }
     }
   },
@@ -225,14 +140,14 @@ export default {
   },
   methods: {
     ...mapActions([
-      'updateContractId'
+      'updateBudgetId'
     ]),
-    addContract () {
-      this.$router.push({name: 'ContractAdd'})
+    addBudget () {
+      this.$router.push({name: 'BudgetAdd'})
     },
     toDetail (row) {
-      this.updateContractId(row.FInterID)
-      this.$router.push({name: 'ContractDetail'})
+      this.updateBudgetId(row.finterid)
+      this.$router.push({name: 'BudgetDetail'})
     },
     del (FInterID) {
       this.$confirm('此操作将该单据, 是否继续?', '提示', {
@@ -243,19 +158,19 @@ export default {
         var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
         tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
         tmpData += '<soap:Body> '
-        tmpData += '<PayContract_DEL xmlns="http://tempuri.org/">'
+        tmpData += '<Final_DEL xmlns="http://tempuri.org/">'
         tmpData += '<ID>' + FInterID + '</ID>'
-        tmpData += '</PayContract_DEL>'
+        tmpData += '</Final_DEL>'
         tmpData += '</soap:Body>'
         tmpData += '</soap:Envelope>'
 
-        this.Http.post('PayContract_DEL', tmpData
+        this.Http.post('Final_DEL', tmpData
         ).then(res => {
           let xml = res.data
           let parser = new DOMParser()
           let xmlDoc = parser.parseFromString(xml, 'text/xml')
           // 提取数据
-          let Result = xmlDoc.getElementsByTagName('PayContract_DELResponse')[0].getElementsByTagName('PayContract_DELResult')[0]
+          let Result = xmlDoc.getElementsByTagName('Final_DELResponse')[0].getElementsByTagName('Final_DELResult')[0]
           let HtmlStr = $(Result).html()
           let Info = (JSON.parse(HtmlStr))[0]
           if (Info.code === '1') {
@@ -285,20 +200,20 @@ export default {
         var tmpData = '<?xml version="1.0" encoding="utf-8"?>'
         tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
         tmpData += '<soap:Body> '
-        tmpData += '<PayContract_Check xmlns="http://tempuri.org/">'
+        tmpData += '<Final_Check xmlns="http://tempuri.org/">'
         tmpData += '<ID>' + FInterID + '</ID>'
         tmpData += '<Type>' + Type + '</Type>'
-        tmpData += '</PayContract_Check>'
+        tmpData += '</Final_Check>'
         tmpData += '</soap:Body>'
         tmpData += '</soap:Envelope>'
 
-        this.Http.post('PayContract_Check', tmpData
+        this.Http.post('Final_Check', tmpData
         ).then(res => {
           let xml = res.data
           let parser = new DOMParser()
           let xmlDoc = parser.parseFromString(xml, 'text/xml')
           // 提取数据
-          let Result = xmlDoc.getElementsByTagName('PayContract_CheckResponse')[0].getElementsByTagName('PayContract_CheckResult')[0]
+          let Result = xmlDoc.getElementsByTagName('Final_CheckResponse')[0].getElementsByTagName('Final_CheckResult')[0]
           let HtmlStr = $(Result).html()
           let Info = (JSON.parse(HtmlStr))[0]
           if (Info.code === '1') {
@@ -323,10 +238,10 @@ export default {
       let dataAll = await this.getListAll()
       require.ensure([], () => {
         const { exportJsonToExcel } = require('../../vendor/Export2Excel.js')
-        const tHeader = ['合同日期', '合同号', '项目编号', '施工队', '安装金额', '材料金额', '材料结算', '合计', '已付金额', '剩余应付', '已付比例', '合同名称', '所属公司', '部门', '业务员']
-        const filterVal = ['合同日期', '合同号', '项目编号', '施工队', '安装金额', '材料金额', '材料结算', '合计', '已付金额', '剩余应付', '已付比例', '合同名称', '所属公司', '部门', '业务员']
+        const tHeader = ['公司名称', '客户名称', '编制人', '编制日期', '部门', '销售员', '项目名称', '项目类别']
+        const filterVal = ['公司名称', '客户名称', '编制人', '编制日期', '部门', '销售员', '项目名称', '项目类别']
         const data = this.formatJson(filterVal, dataAll)
-        exportJsonToExcel(tHeader, data, '分包合同')
+        exportJsonToExcel(tHeader, data, '工程项目与决算表')
       })
     },
     formatJson (filterVal, jsonData) {
@@ -338,7 +253,7 @@ export default {
         tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
         tmpData += '<soap:Body> '
         tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-        tmpData += "<FSQL><![CDATA[exec [Z_PAYReport] '" + this.filterProjectCode + "','" + this.filterConstructionTeam + "','" + this.filterCompanyName + "'," + this.userInfo.fempid + ']]></FSQL>'
+        tmpData += "<FSQL><![CDATA[exec [Z_FinalReport] '" + this.filterProjectName + "'," + this.userInfo.fempid + ']]></FSQL>'
         tmpData += '</JA_LIST>'
         tmpData += '</soap:Body>'
         tmpData += '</soap:Envelope>'
@@ -364,7 +279,7 @@ export default {
       tmpData += '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> '
       tmpData += '<soap:Body> '
       tmpData += '<JA_LIST xmlns="http://tempuri.org/">'
-      tmpData += "<FSQL><![CDATA[exec [Z_PAYList] '" + this.filterProjectCode + "','" + this.filterConstructionTeam + "','" + this.filterCompanyName + "'," + Number((this.curPage - 1) * this.pageSize + 1) + ',' + this.curPage * this.pageSize + ',' + this.userInfo.fempid + ']]></FSQL>'
+      tmpData += "<FSQL><![CDATA[exec [Z_FinalList] '" + this.filterProjectName + "'," + Number((this.curPage - 1) * this.pageSize + 1) + ',' + this.curPage * this.pageSize + ',' + this.userInfo.fempid + ']]></FSQL>'
       tmpData += '</JA_LIST>'
       tmpData += '</soap:Body>'
       tmpData += '</soap:Envelope>'
@@ -380,10 +295,7 @@ export default {
         let Info = JSON.parse(HtmlStr)
         console.log(Info)
         if (Info.length > 0) {
-          this.tableData = Info.map(item => {
-            item['合同名称'] = item['合同名称'] === '0' ? '' : item['合同名称']
-            return item
-          })
+          this.tableData = Info
           this.sum = Info[0].fcount
           this.loading = false
         } else {

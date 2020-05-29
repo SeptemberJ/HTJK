@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <router-view/>
-    <!-- <router-view v-if="pathName == 'Login'"/>
+    <!-- <router-view/> -->
+    <router-view v-if="pathName == 'Login'"/>
     <el-container v-else>
       <el-header height="42px" style="width: 100%;background: #4396CA;position:fixed;top:0;zIndex: 999;">
         <span @click="goIndex" style="height:42px;display:block;line-height: 42px;color:#fff;float:left;"><i class="el-icon-menu" style="padding-right: 5px;"></i>泽天</span>
@@ -29,7 +29,7 @@
         </el-aside>
         <el-main style="width: calc(100% - 100px);position: absolute;top: 42px;left: 100px;"><router-view/></el-main>
       </el-container>
-    </el-container> -->
+    </el-container>
   </div>
 </template>
 
@@ -73,7 +73,7 @@ export default {
           this.$router.push({name: 'ContractList'})
           break
         case '3':
-          this.$router.push({name: 'Account'})
+          this.$router.push({name: 'BudgetList'})
           break
       }
     },

@@ -5,7 +5,9 @@ import FilterTable from '@/pages/FilterTable'
 import Contract from '@/pages/Contract'
 import Login from '@/pages/Login'
 import Module from '@/pages/Module'
-import Account from '@/pages/Account/Account'
+import BudgetAdd from '@/pages/Budget/BudgetAdd'
+import BudgetList from '@/pages/Budget/BudgetList'
+import BudgetDetail from '@/pages/Budget/BudgetDetail'
 import ContractAdd from '@/pages/Subcontract/ContractAdd'
 import ContractList from '@/pages/Subcontract/ContractList'
 import ContractDetail from '@/pages/Subcontract/ContractDetail'
@@ -31,9 +33,21 @@ const router = new VueRouter({
       meta: {requireAuth: true}
     },
     {
-      path: '/Account',
-      name: 'Account',
-      component: Account,
+      path: '/BudgetList',
+      name: 'BudgetList',
+      component: BudgetList,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/BudgetAdd',
+      name: 'BudgetAdd',
+      component: BudgetAdd,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/BudgetDetail',
+      name: 'BudgetDetail',
+      component: BudgetDetail,
       meta: {requireAuth: true}
     },
     {

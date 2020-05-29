@@ -95,7 +95,6 @@ function getzf (num) {
 
 // 日期大小
 export function compareNYR (parameter) {
-  console.log(parameter)
   if (parameter) {
     let dateA = new Date(parameter.substring(0, 10))
     let dateNow = new Date()
